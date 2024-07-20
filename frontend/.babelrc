@@ -1,0 +1,27 @@
+{
+    "presets": ["@babel/preset-env", "@babel/preset-react"],
+    "plugins": [
+        [
+            "module-resolver",
+            {
+                "root": ["./src/"],
+                "alias": {
+                    "@images": "./src/assets/images",
+                    "@styles": "./src/assets/styles",
+                    "@components": "./src/components",
+                    "@constants": "./src/constants",
+                    "@hooks": "./src/hooks",
+                    "@contexts": "./src/contexts",
+                    "@pages": "./src/pages",
+                    "@partials": "./src/partials",
+                    "@layouts": "./src/layouts",
+                    "@services": "./src/services",
+                    "@utils": "./src/utils",
+                    "@actions": "./src/redux/actions",
+                    "@reducers": "./src/redux/reducers",
+                    "@store": "./src/redux/store"
+                }
+            }
+        ]
+    ]
+}
