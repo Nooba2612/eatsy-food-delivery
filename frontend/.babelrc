@@ -20,7 +20,7 @@
                     "@actions": "./src/redux/actions",
                     "@reducers": "./src/redux/reducers",
                     "@store": "./src/redux/store"
-                }
+                },"extensions": [".js", ".jsx", ".ts", ".tsx"]
             }
         ]
     ]

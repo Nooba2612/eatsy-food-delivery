@@ -6,17 +6,17 @@
         "allowJs": true,
         "checkJs": true,
         "paths": {
-            "@config": ["./src/config/*"],
-            "@controllers": ["./src/controllers/*"],
-            "@middleware": ["./src/middleware/*"],
-            "@models": ["./src/models/*"],
-            "@routes": ["./src/routes/*"],
-            "@services": ["./src/services/*"],
-            "@utils": ["./src/utils/*"],
-            "@views": ["./src/views/*"],
-            "@images": ["./src/images/*"],
-            "@javascripts": ["./src/public/javascripts/*"],
-            "@stylesheets": ["./src/public/stylesheets/*"]
+            "@config/*": ["./src/config/*"],
+            "@controllers/*": ["./src/controllers/*"],
+            "@middleware/*": ["./src/middleware/*"],
+            "@models/*": ["./src/models/*"],
+            "@routes/*": ["./src/routes/*"],
+            "@services/*": ["./src/services/*"],
+            "@utils/*": ["./src/utils/*"],
+            "@views/*": ["./src/views/*"],
+            "@images/*": ["./src/images/*"],
+            "@javascripts/*": ["./src/public/javascripts/*"],
+            "@stylesheets/*": ["./src/public/stylesheets/*"]
         }
     },
     "exclude": ["node_modules", "**/node_modules", "dist"]

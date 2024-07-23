@@ -17,7 +17,8 @@
                     "@images": "./src/public/images",
                     "@javascripts": "./src/public/javascripts",
                     "@stylesheets": "./src/public/stylesheets"
-                }
+                },
+                "extensions": [".js", ".jsx", ".ts", ".tsx"]
             }
         ]
     ]
