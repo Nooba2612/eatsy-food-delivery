@@ -1,9 +1,6 @@
 {
     "compilerOptions": {
         "baseUrl": ".",
-        "target": "es6",
-        "module": "es6",
-        "jsx": "react",
         "paths": {
             "@images/*": ["./src/assets/images/*"],
             "@styles/*": ["./src/assets/styles/*"],
@@ -20,6 +17,5 @@
             "@reducers/*": ["./src/redux/reducers/*"],
             "@store/*": ["./src/redux/store/*"]
         }
-    },
-    "exclude": ["node_modules", "**/node_modules", "dist"]
+    }
 }

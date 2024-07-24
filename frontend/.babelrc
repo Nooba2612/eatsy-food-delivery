@@ -4,7 +4,6 @@
         [
             "module-resolver",
             {
-                "root": ["./src/"],
                 "alias": {
                     "@images": "./src/assets/images",
                     "@styles": "./src/assets/styles",
@@ -20,7 +19,8 @@
                     "@actions": "./src/redux/actions",
                     "@reducers": "./src/redux/reducers",
                     "@store": "./src/redux/store"
-                },"extensions": [".js", ".jsx", ".ts", ".tsx"]
+                },
+                "extensions": [".js", ".jsx", ".ts", ".tsx"]
             }
         ]
     ]

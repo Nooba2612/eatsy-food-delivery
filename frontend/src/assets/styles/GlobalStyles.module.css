@@ -1,0 +1,9 @@
+@import 'normalize.css';
+
+/** variables **/
+:root {
+  --primaryColor: #fff;
+  --secondary-color: #2ecc71;
+  --maxWidth: 1200px;
+  --minWidth: 600px;
+}
