@@ -3,13 +3,17 @@ import ReactDOM from "react-dom/client";
 import App from "./App.jsx";
 import reportWebVitals from "./reportWebVitals";
 import GlobalStyles from "@components/GlobalStyles.jsx";
+import { Provider } from "react-redux";
+import store from "@store/store.js";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
     <React.StrictMode>
-        <GlobalStyles>
-            <App />
-        </GlobalStyles>
+        <Provider>
+            <GlobalStyles store={store}>
+                <App />
+            </GlobalStyles>
+        </Provider>
     </React.StrictMode>,
 );
 

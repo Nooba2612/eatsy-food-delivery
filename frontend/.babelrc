@@ -16,9 +16,9 @@
                     "@layouts": "./src/layouts",
                     "@services": "./src/services",
                     "@utils": "./src/utils",
-                    "@actions": "./src/redux/actions",
-                    "@reducers": "./src/redux/reducers",
-                    "@store": "./src/redux/store"
+                    "@actions": "./src/actions",
+                    "@features": "./src/features",
+                    "@store": "./src/store"
                 },
                 "extensions": [".js", ".jsx", ".ts", ".tsx"]
             }
