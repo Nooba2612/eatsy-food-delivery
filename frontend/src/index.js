@@ -9,8 +9,8 @@ import store from "@store/store.js";
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
     <React.StrictMode>
-        <Provider>
-            <GlobalStyles store={store}>
+        <Provider store={store}>
+            <GlobalStyles>
                 <App />
             </GlobalStyles>
         </Provider>

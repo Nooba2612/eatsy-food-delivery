@@ -1,13 +1,5 @@
 module.exports = {
-    plugins: [
-        [
-            require("postcss-preset-env")({
-                stage: 1,
-            }),
-            require("autoprefixer"),
-            require("cssnano")({
-                preset: "default",
-            }),
-        ],
-    ],
+    // Add you postcss configuration here
+    // Learn more about it at https://github.com/webpack-contrib/postcss-loader#config-files
+    plugins: [["autoprefixer", "nanocss", "postcss-preset-env"]],
 };

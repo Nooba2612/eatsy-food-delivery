@@ -12,11 +12,10 @@
                     "@hooks": "./src/hooks",
                     "@contexts": "./src/contexts",
                     "@pages": "./src/pages",
-                    "@partials": "./src/partials",
                     "@layouts": "./src/layouts",
                     "@services": "./src/services",
                     "@utils": "./src/utils",
-                    "@actions": "./src/actions",
+                    "@router": "./src/router",
                     "@features": "./src/features",
                     "@store": "./src/store"
                 },
