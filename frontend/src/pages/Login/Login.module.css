@@ -1,0 +1,173 @@
+.header {
+    background-color: var(--backgroundColor);
+    position: fixed;
+    max-height: 100px;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+.header .logo a {
+    font-size: 2rem;
+    font-weight: var(--fontWeightBold);
+    color: var(--blackColor);
+    text-shadow: 4px 4px 2px var(--primaryColor);
+}
+
+.content {
+    padding-top: 100px;
+}
+
+.content .title h1 {
+    font-weight: 600;
+}
+
+.content .phone-input-wrapper {
+    display: flex;
+    border: 1px solid var(--borderInputColor);
+    padding: 12px 20px;
+    margin-top: 30px;
+    border-radius: 10px;
+    position: relative;
+    align-items: center;
+}
+
+.content input {
+    border: none;
+    outline: none;
+    padding: 0 20px;
+    font-size: var(--fontSizeLarge);
+}
+
+.phone-input-alert {
+    position: absolute;
+    bottom: -20px;
+    left: 0;
+    color: var(--alertColor);
+    font-size: var(--fontSizeSmall);
+    font-weight: var(--fontWeightNormal);
+    opacity: 0.8;
+}
+
+.content input::placeholder {
+    font-weight: var(--fontWeightBold);
+}
+
+.content .hidden-input {
+    display: none;
+}
+
+.content .country-selection {
+    position: relative;
+    font-size: var(--fontSizeLarge);
+}
+
+.content .country-selection .dropdown {
+    position: absolute;
+    display: none;
+}
+
+.content .country-selection .flag {
+    margin-right: var(--spacingSmall);
+    background-repeat: no-repeat;
+    background-position: center 32.8186%;
+    background-size: 100% 49494%;
+    overflow: hidden;
+    vertical-align: middle;
+    box-shadow: 0 2px 4px rgba(26, 26, 26, 0.08);
+    height: 20px;
+    min-width: 30px;
+    border-radius: 2px;
+}
+
+.select-input-content {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    padding: 5px 10px;
+}
+
+.select-input-content .code {
+    margin-left: var(--spacingMedium);
+    font-weight: var(--fontWeightBold);
+}
+
+.memorized-login-wrapper {
+    margin-top: 25px;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.memorized-login-wrapper .checkbox-label {
+    font-size: var(--fontSizeSmall);
+    color: var(--blackColor);
+    opacity: 0.7;
+    font-weight: var(--fontWeightNormal);
+}
+
+form .submit-btn {
+    width: 100%;
+    margin-top: 20px;
+    padding: 15px 0;
+    text-align: center;
+    background-color: var(--primaryColor);
+    transition: all 0.2s linear;
+    border-radius: 50px;
+    color: var(--whiteColor);
+    font-weight: var(--fontWeightNormal);
+}
+
+form .submit-btn:hover {
+    opacity: 0.8;
+}
+
+.social-login-buttons-group {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: start;
+}
+
+.social-login-buttons-group button {
+    display: flex;
+    align-items: center;
+    padding: 10px 20px;
+    width: 100%;
+    border: 1px solid var(--borderInputColor);
+    border-radius: 50px;
+    margin-bottom: 10px;
+    font-size: var(--fontSizeSmall);
+}
+
+.social-login-buttons-group button span {
+    display: block;
+    width: 100%;
+    text-align: center;
+}
+
+.social-login-buttons-group .logo {
+    width: 25px;
+    height: 25px;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center center;
+    vertical-align: middle;
+    text-align: start;
+}
+
+footer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 30px;
+    font-size: var(--fontSizeTiny);
+    font-weight: var(--fontWeightNormal);
+    opacity: 0.6;
+}
