@@ -1,7 +1,85 @@
+/** font family **/
+@import url("https://fonts.googleapis.com/css2?family=Arsenal+SC:ital,wght@0,400;0,700;1,400;1,700&family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap");
+
 /** variables **/
 :root {
-  --primaryColor: #fff;
-  --secondary-color: #2ecc71;
-  --maxWidth: 1200px;
-  --minWidth: 600px;
+    /* Colors */
+    --primaryColor: #fbc336;
+    --backgroundColor: #ffecbd;
+    --whiteColor: #fff;
+    --blackColor: #000;
+    --borderInputColor: #b3b3b3;
+    --alertColor: rgb(211, 44, 44);
+
+    /* Spacing */
+    --spacingSmall: 8px;
+    --spacingMedium: 16px;
+    --spacingLarge: 32px;
+
+    /* Typography */
+    --fontFamily: "Montserrat", sans-serif;
+    --fontWeightNormal: 500;
+    --fontWeightBold: 700;
+    --fontSizeSmall: 0.875rem;
+    --fontSizeBase: 1rem;
+    --fontSizeLarge: 1.2rem;
+    --fontSizeTiny: 0.75rem;
+    --iconFontSize: 1.8rem;
+
+    /* Dimensions */
+    --maxWidth: 1200px;
+    --minWidth: 320px;
+}
+
+*,
+*:before,
+*:after {
+    box-sizing: border-box;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    font: inherit;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+a,
+ul,
+li {
+    text-decoration: none;
+    list-style-type: none;
+}
+
+img,
+picture,
+svg,
+video {
+    display: block;
+    max-width: 100%;
+}
+
+input,
+select,
+textarea {
+    background-color: transparent;
+    outline: none;
+}
+
+button {
+    cursor: pointer;
+    background-color: transparent;
+    outline: none;
+    border: 0;
+}
+
+body {
+    min-height: 100vh;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 1;
+    font-family: var(--fontFamily);
 }

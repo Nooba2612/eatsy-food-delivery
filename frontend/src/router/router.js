@@ -1,5 +1,5 @@
 import React from "react";
-import Authentication from "@components/Authentication";
+import { createBrowserRouter } from "react-router-dom";
 
 import {
     Home,
@@ -17,42 +17,63 @@ import {
     Search,
     Merchant,
     MerchantManage,
+    Contact,
+    Offers,
 } from "@pages/index";
-
-const { createBrowserRouter } = require("react-router-dom");
+import { Authentication } from "@components/index";
+import DefaultLayout from "@layouts/DefaultLayout";
 
 const publicRoutes = [
     {
         path: "/",
-        element: <Home />,
-        errorElement: <Error />,
-    },
-    {
-        path: "/about",
-        element: <About />,
+        element: <DefaultLayout />,
+        children: [
+            {
+                path: "/",
+                element: <Home />,
+                errorElement: <Error />,
+            },
+            {
+                path: "/about",
+                element: <About />,
+            },
+
+            {
+                path: "/search",
+                element: <Search />,
+            },
+            {
+                path: "/restaurants",
+                element: <RestaurantList />,
+            },
+            {
+                path: "/menu",
+                element: <Menu />,
+            },
+            {
+                path: "/contact",
+                element: <Contact />,
+            },
+            {
+                path: "/offers",
+                element: <Offers />,
+            },
+        ],
     },
     {
         path: "/login",
         element: <Login />,
-    },
-    {
-        path: "/search",
-        element: <Search />,
-    },
-    {
-        path: "/restaurants",
-        element: <RestaurantList />,
-    },
-    {
-        path: "/menu",
-        element: <Menu />,
     },
 ];
 
 const privateRoutes = [
     {
         path: "/",
-        element: <Authentication />,
+        element: (
+            <Authentication>
+                <DefaultLayout />
+            </Authentication>
+        ),
         children: [
             {
                 path: "/dashboard",
