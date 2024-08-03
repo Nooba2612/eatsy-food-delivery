@@ -1,38 +1,98 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import classNames from "classnames/bind";
-import { Box, Checkbox, Container, Divider } from "@mui/material";
+import { Box, Checkbox, Container, Divider, Popper } from "@mui/material";
 import { Link } from "react-router-dom";
-import { CopyrightRounded, ExpandMore, Margin } from "@mui/icons-material";
+import { CopyrightRounded, ExpandLess, ExpandMore, Margin } from "@mui/icons-material";
+import { useGoogleLogin } from "@react-oauth/google";
+import { useForm } from "react-hook-form";
 
 import styles from "./Login.module.css";
 import { Footer, Header } from "@components/index";
 import countryService from "@services/countryService";
+import { regexNumbers, regexVietnamPhoneNumber } from "@constants/constants";
 
 const cx = classNames.bind(styles);
 
 function Login() {
     const [countries, setCountries] = useState([]);
-    const [currentCountry, setCurrentCountry] = useState();
+    const [currentCountry, setCurrentCountry] = useState({
+        name: "Việt Nam",
+        flags: {
+            png: "https://flagcdn.com/w320/vn.png",
+        },
+        idd: {
+            root: "+8",
+            suffixes: "4",
+        },
+        caa3: "VNM",
+    });
     const [loading, setLoading] = useState(true);
-    const [isOpenCheckboxDropdown, setIsOpenCheckboxDropdown] = useState(false);
+    const [isOpenDropdown, setIsOpenDropdown] = useState(false);
     const [alertMessage, setAlertMessage] = useState();
+    const [isValidForm, setIsValidForm] = useState(false);
+
+    const { register, handleSubmit, watch } = useForm();
+
+    const onSubmit = (data) => {
+        let formData = new FormData();
+        formData = {
+            country: {
+                countryName: data.countryName,
+                countryCaa3: data.countryCaa3,
+                countryCode: data.countryCode,
+            },
+            phone: data.phone,
+            memorizedLogin: data.memorizedLogin,
+        };
+        console.log(formData);
+    };
+
+    const googleLogin = useGoogleLogin({
+        onSuccess: (codeResponse) => console.log(codeResponse),
+        flow: "auth-code",
+    });
 
     const handleCountryChange = (e) => {
-        setCurrentCountry(e.target.value);
+        countries.forEach((country) => {
+            if (country.cca3 === e.currentTarget.getAttribute("data-option-value")) {
+                setCurrentCountry(country);
+            }
+        });
+    };
+
+    const handleOnlyInputNumber = (e) => {
+        e.currentTarget.value = e.currentTarget.value.replace(regexNumbers, "");
+    };
+
+    const handleValidatePhoneInput = (e) => {
+        handleOnlyInputNumber(e);
+        const inputValue = e.currentTarget.value;
+        if (inputValue.length <= 0) {
+            setAlertMessage("Số điện thoại không được bỏ trống.");
+        } else if (regexVietnamPhoneNumber.test(inputValue)) {
+            setAlertMessage("Số điện thoại không hợp lệ.");
+        } else {
+            setAlertMessage();
+            setIsValidForm(true);
+        }
     };
 
     useEffect(() => {
         const fetchCountries = async () => {
             try {
                 const data = await countryService.getAll();
-                console.log(data);
+                const defaultCountry = data[167];
+                setCountries(data);
+                setCurrentCountry(defaultCountry); // default country
             } catch (error) {
                 console.log(error);
             } finally {
                 setLoading(false);
             }
         };
-        // fetchCountries();
+        fetchCountries();
+
+        return;
     }, []);
 
     return (
@@ -47,49 +107,96 @@ function Login() {
             <div className={cx("content")}>
                 <Container maxWidth="xs">
                     <div className="login-form">
-                        <form action="/login" method="post">
+                        <form onSubmit={handleSubmit(onSubmit)} action="/login" method="post">
                             <div className={cx("title")}>
                                 <h1>Đăng nhập</h1>
                                 <h4>Nhập số điện thoại của bạn</h4>
                                 <div className={cx("phone-input-wrapper")}>
-                                    <div className={cx("country-selection")}>
-                                        <select className={cx("hidden-input")} name="country" id="country"></select>
+                                    <div
+                                        className={cx("country-selection")}
+                                        aria-describedby={"country-selection"}
+                                        onClick={() => setIsOpenDropdown((prevState) => !prevState)}
+                                    >
+                                        <input
+                                            className={cx("hidden-input")}
+                                            {...register("countryName")}
+                                            value={currentCountry?.name || ""}
+                                        />
+                                        <input
+                                            className={cx("hidden-input")}
+                                            {...register("countryCaa3")}
+                                            value={currentCountry?.caa3 || ""}
+                                        />
+
+                                        <input
+                                            className={cx("hidden-input")}
+                                            {...register("countryCode")}
+                                            value={currentCountry?.idd.root + currentCountry?.idd.suffixes || ""}
+                                        />
                                         <div className={cx("select-input-content")}>
                                             <div
                                                 className={cx("flag")}
                                                 style={{
-                                                    backgroundImage: `url(${require("@images/country-flags.png")})`,
+                                                    backgroundImage: `url(${currentCountry?.flags.png})`,
                                                 }}
                                             ></div>
-                                            <ExpandMore />
-                                            {/* <ExpandLess /> */}
-                                            <span className={cx("code")}>+84</span>
+                                            <ExpandMore className={cx("more-icon", { active: isOpenDropdown })} />
+
+                                            <span className={cx("code")}>
+                                                {currentCountry?.idd.root + currentCountry?.idd.suffixes || ""}
+                                            </span>
                                         </div>
-                                        <div className={cx("dropdown")} name="country" id="country">
-                                            <div className={cx("option")} data-option-value="VN">
-                                                <span
-                                                    className={cx("flag")}
-                                                    style={{
-                                                        backgroundImage: `url(${require("@images/country-flags.png")})`,
-                                                    }}
-                                                ></span>
-                                                <span className={cx("code")}>+84</span>
-                                                <span className={cx("name")}>Việt Nam</span>
-                                            </div>
+                                        <div
+                                            id="country-selection"
+                                            className={cx("dropdown", { open: isOpenDropdown })}
+                                            name="country-selection"
+                                        >
+                                            <div className={cx("dropdown-overlay")}></div>
+                                            {countries.map((country, index) => (
+                                                <div
+                                                    key={index}
+                                                    className={cx("option")}
+                                                    data-option-value={country.cca3}
+                                                    onClick={handleCountryChange}
+                                                >
+                                                    <div
+                                                        className={cx("flag")}
+                                                        style={{
+                                                            backgroundImage: `url(${country.flags.png})`,
+                                                        }}
+                                                    ></div>
+                                                    <span
+                                                        className={cx("code")}
+                                                        style={{ marginRight: "var(--spacingSmall)" }}
+                                                    >
+                                                        {country.idd.root + country.idd.suffixes || ""}
+                                                    </span>
+                                                    <span className={cx("name")}>{country.name.common}</span>
+                                                </div>
+                                            ))}
                                         </div>
                                     </div>
-                                    <input type="tel" id="phone-input" placeholder="0 1 2 3 4 5 6 7 8 9" />
+                                    <input
+                                        type="text"
+                                        {...register("phone")}
+                                        onInput={handleValidatePhoneInput}
+                                        placeholder="0 1 2 3 4 5 6 7 8 9"
+                                    />
                                     <div className={cx("phone-input-alert")}>{alertMessage}</div>
                                 </div>
                                 <div className={cx("memorized-login-wrapper")}>
                                     <Checkbox
-                                        value={"memorized-login"}
+                                        {...register("memorizedLogin")}
                                         size="medium"
                                         style={{ color: "var(--primaryColor)" }}
                                     />
                                     <span className={cx("checkbox-label")}>Ghi nhớ đăng nhập trên thiết bị này.</span>
                                 </div>
-                                <button type="submit" className={cx("submit-btn")}>
+                                <button
+                                    type="submit"
+                                    className={cx("submit-btn", { disabled: !isValidForm })}
+                                    disabled={!isValidForm}
+                                >
                                     Tiếp tục
                                 </button>
                             </div>
@@ -101,7 +208,7 @@ function Login() {
                             hoặc
                         </Divider>
                         <div className={cx("social-login-buttons-group")}>
-                            <button type="button" className={cx("google-login-btn")}>
+                            <button type="button" onClick={googleLogin} className={cx("google-login-btn")}>
                                 <div
                                     className={cx("logo")}
                                     style={{ backgroundImage: `url(${require("@images/logos/google-logo.webp")})` }}

@@ -8,8 +8,9 @@
     --backgroundColor: #ffecbd;
     --whiteColor: #fff;
     --blackColor: #000;
-    --borderInputColor: #b3b3b3;
+    --borderColor: #b3b3b3;
     --alertColor: rgb(211, 44, 44);
+    --disabledColor: #dad9d9;
 
     /* Spacing */
     --spacingSmall: 8px;
@@ -29,6 +30,57 @@
     /* Dimensions */
     --maxWidth: 1200px;
     --minWidth: 320px;
+
+    /* Shadows */
+    --shadowLight: 0px 2px 4px rgba(0, 0, 0, 0.1); /* Light shadow */
+    --shadowMedium: 0px 4px 8px rgba(0, 0, 0, 0.15); /* Medium shadow */
+    --shadowHeavy: 0px 8px 16px rgba(0, 0, 0, 0.2); /* Heavy shadow */
+
+    /* Borders */
+    --borderWidthThin: 1px;
+    --borderWidthMedium: 2px;
+    --borderWidthThick: 4px;
+    --borderStyle: solid;
+
+    /* Transitions & Animations */
+    --transitionFast: 0.2s;
+    --transitionNormal: 0.3s;
+    --transitionSlow: 0.5s;
+    --transitionTimingFunction: ease-in-out;
+
+    /* Z-index */
+    --zIndexDefault: 1;
+    --zIndexOverlay: -999;
+    --zIndexDropdown: 1000;
+    --zIndexModal: 1050;
+    --zIndexTooltip: 1100;
+
+    /* Breakpoints (Responsive Design) */
+    --breakpointXs: 480px; /* Extra small devices */
+    --breakpointSm: 768px; /* Small devices */
+    --breakpointMd: 992px; /* Medium devices */
+    --breakpointLg: 1200px; /* Large devices */
+    --breakpointXl: 1440px; /* Extra large devices */
+
+    /* Opacity */
+    --opacityLow: 0.3;
+    --opacityMedium: 0.6;
+    --opacityHigh: 0.9;
+
+    /* Line Height */
+    --lineHeightTight: 1.2;
+    --lineHeightNormal: 1.5;
+    --lineHeightLoose: 1.8;
+
+    /* Border Radius */
+    --borderRadiusSmall: 4px;
+    --borderRadiusMedium: 8px;
+    --borderRadiusLarge: 16px;
+    --borderRadiusRounded: 50%;
+
+    /* Miscellaneous */
+    --headerHeight: 64px;
+    --footerHeight: 80px;
 }
 
 *,
