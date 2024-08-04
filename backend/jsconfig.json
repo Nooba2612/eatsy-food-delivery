@@ -4,7 +4,7 @@
         "paths": {
             "@config/*": ["./src/config/*"],
             "@controllers/*": ["./src/controllers/*"],
-            "@middleware/*": ["./src/middleware/*"],
+            "@middleware/*": ["src/middlewares/*"],
             "@models/*": ["./src/models/*"],
             "@routes/*": ["./src/routes/*"],
             "@services/*": ["./src/services/*"],
@@ -14,5 +14,5 @@
             "@javascripts/*": ["./src/public/javascripts/*"],
             "@stylesheets/*": ["./src/public/stylesheets/*"]
         }
-    },
+    }
 }
