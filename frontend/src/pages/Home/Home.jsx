@@ -6,7 +6,7 @@ import styles from "./Home.module.css";
 const cx = classNames.bind(styles);
 
 function Home() {
-    return <div className={cx("background")}></div>;
+    return <div className={cx("background")}>Home nè con</div>;
 }
 
 export default Home;
