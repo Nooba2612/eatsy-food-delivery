@@ -3,7 +3,6 @@ const path = require("path");
 const dotenv = require("dotenv");
 
 const routes = require("@routes/index");
-const usersRouter = require("@routes/userRouter");
 const middlewares = require("@middlewares/index");
 const { connectToDatabase } = require("@config/database");
 

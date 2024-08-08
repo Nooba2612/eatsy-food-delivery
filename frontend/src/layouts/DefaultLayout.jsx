@@ -1,12 +1,15 @@
-import { Body, Footer, Header } from "@components/index";
 import React from "react";
 import { Outlet } from "react-router-dom";
 
+import { Body, Footer, Header } from "@components/index";
+import useLoading from "@hooks/useLoading";
+
 function DefaultLayout() {
+    
     return (
         <>
             <Header />
-            <Outlet />                                              
+            <Outlet />
             <Footer />
         </>
     );

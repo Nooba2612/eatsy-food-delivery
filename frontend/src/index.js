@@ -1,11 +1,13 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import App from "./App.jsx";
+import { GoogleOAuthProvider } from "@react-oauth/google";
 import reportWebVitals from "./reportWebVitals";
 import { Provider } from "react-redux";
+
 import store from "@store/store.js";
+import App from "./App.jsx";
 import { GlobalStyles } from "@components/index.js";
-import { GoogleOAuthProvider } from "@react-oauth/google";
+import { LoadingProvider } from "@contexts/loading.js";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
@@ -14,7 +16,9 @@ root.render(
         <GoogleOAuthProvider clientId={process.env.REACT_APP_GOOGLE_CLIENT_ID}>
             <Provider store={store}>
                 <GlobalStyles>
-                    <App />
+                    <LoadingProvider>
+                        <App />
+                    </LoadingProvider>
                 </GlobalStyles>
             </Provider>
         </GoogleOAuthProvider>

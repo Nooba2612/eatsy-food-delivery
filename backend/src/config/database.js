@@ -18,20 +18,25 @@ const connection = mysql.createConnection({
 
 // Connect to the database
 const connectToDatabase = () => {
-    connection.connect((err) => {
+    connection.connect((error) => {
         if (err) {
-            console.error("Error connecting to the database:", err.stack);
+            console.error("\n\nError connecting to the database:", error.stack);
             return;
         }
-        console.log("Connected to the database.");
+        console.log("\n\nConnected to the database.");
     });
 };
 
-const logDB = () => {
-    connection.query("SELECT * FROM `Users` ", (err, results, fields) => {
-        console.log(results[0]);
+const getTableDataBySQL = (sql, values) => {
+    connection.execute(sql, values, (err, rows, fields) => {
+        if (err instanceof Error) {
+            console.log(err);
+            return;
+        }
+
+        console.log(rows);
+        console.log(fields);
     });
 };
-// logDB();
 
 module.exports = { connectToDatabase, connection };
