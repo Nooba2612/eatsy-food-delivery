@@ -2,10 +2,9 @@ const express = require("express");
 const path = require("path");
 const dotenv = require("dotenv");
 
-const indexRouter = require("./routes/index");
-const usersRouter = require("./routes/userRouter");
-const middlewares = require("./middlewares");
-const routes = require("./routes/index");
+const routes = require("@routes/index");
+const middlewares = require("@middlewares/index");
+const { connectToDatabase } = require("@config/database");
 
 dotenv.config();
 
@@ -20,10 +19,7 @@ middlewares(app);
 // routing
 routes(app);
 
-const port = process.env.PORT || 5678;
-
-app.listen(port, () => {
-    console.log(`Listening on http://localhost:${port}`);
-});
+// connect to the database
+// connectToDatabase();
 
 module.exports = app;

@@ -1,8 +1,8 @@
 {
-  "name": "my-webpack-project",
+  "name": "eatsy_food_delivery_frontend",
   "version": "1.0.0",
   "private": true,
-  "description": "My webpack project",
+  "description": "Eatsy Food Delivery Frontend",
   "dependencies": {
     "@emotion/react": "^11.13.0",
     "@emotion/styled": "^11.13.0",

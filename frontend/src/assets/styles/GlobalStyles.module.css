@@ -51,9 +51,10 @@
     /* Z-index */
     --zIndexDefault: 1;
     --zIndexOverlay: -999;
-    --zIndexDropdown: 1000;
-    --zIndexModal: 1050;
-    --zIndexTooltip: 1100;
+    --zIndexDropdown: 111;
+    --zIndexModal: 222;
+    --zIndexTooltip: 333;
+    --zIndexOnTop: 999;
 
     /* Breakpoints (Responsive Design) */
     --breakpointXs: 480px; /* Extra small devices */

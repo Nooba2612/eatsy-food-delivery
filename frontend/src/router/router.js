@@ -27,11 +27,11 @@ const publicRoutes = [
     {
         path: "/",
         element: <DefaultLayout />,
+        errorElement: <Error />,
         children: [
             {
                 path: "/",
                 element: <Home />,
-                errorElement: <Error />,
             },
             {
                 path: "/about",

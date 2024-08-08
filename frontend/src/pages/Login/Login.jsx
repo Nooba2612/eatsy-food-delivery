@@ -5,15 +5,19 @@ import { Link } from "react-router-dom";
 import { CopyrightRounded, ExpandLess, ExpandMore, Margin } from "@mui/icons-material";
 import { useGoogleLogin } from "@react-oauth/google";
 import { useForm } from "react-hook-form";
+import axios from "axios";
 
 import styles from "./Login.module.css";
 import { Footer, Header } from "@components/index";
 import countryService from "@services/countryService";
 import { regexNumbers, regexVietnamPhoneNumber } from "@constants/constants";
+import useLoading from "@hooks/useLoading";
 
 const cx = classNames.bind(styles);
 
 function Login() {
+    const { register, handleSubmit, watch } = useForm();
+
     const [countries, setCountries] = useState([]);
     const [currentCountry, setCurrentCountry] = useState({
         name: "Việt Nam",
@@ -26,25 +30,38 @@ function Login() {
         },
         caa3: "VNM",
     });
-    const [loading, setLoading] = useState(true);
     const [isOpenDropdown, setIsOpenDropdown] = useState(false);
     const [alertMessage, setAlertMessage] = useState();
-    const [isValidForm, setIsValidForm] = useState(false);
+    const [isValidForm, setIsValidForm] = useState(true);
+    const { setLoading } = useLoading();
 
-    const { register, handleSubmit, watch } = useForm();
-
-    const onSubmit = (data) => {
-        let formData = new FormData();
-        formData = {
+    const onSubmit = async (data) => {
+        const formData = {
             country: {
-                countryName: data.countryName,
-                countryCaa3: data.countryCaa3,
-                countryCode: data.countryCode,
+                countryName: data?.countryName || "",
+                countryCaa3: data?.countryCaa3 || "",
+                countryCode: data?.countryCode || "",
             },
-            phone: data.phone,
-            memorizedLogin: data.memorizedLogin,
+            phone: data?.phone || "",
+            memorizedLogin: data?.memorizedLogin || false,
         };
+
+        
+
         console.log(formData);
+
+        axios
+            .post(`http://localhost:${process.env.REACT_APP_SERVER_PORT}/login`, formData)
+            .then((res) => {
+                setLoading(true);
+                console.log(res);
+            })
+            .catch((err) => {
+                console.log(err);
+            })
+            .finally(() => {
+                setLoading(false);
+            });
     };
 
     const googleLogin = useGoogleLogin({
@@ -107,7 +124,7 @@ function Login() {
             <div className={cx("content")}>
                 <Container maxWidth="xs">
                     <div className="login-form">
-                        <form onSubmit={handleSubmit(onSubmit)} action="/login" method="post">
+                        <form onSubmit={handleSubmit(onSubmit)}>
                             <div className={cx("title")}>
                                 <h1>Đăng nhập</h1>
                                 <h4>Nhập số điện thoại của bạn</h4>
