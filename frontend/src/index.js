@@ -10,6 +10,7 @@ import { GlobalStyles } from "@components/index.js";
 import { LoadingProvider } from "@contexts/loading.js";
 
 
+
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
 root.render(
