@@ -9,6 +9,7 @@
     display: flex;
     align-items: center;
     justify-content: flex-start;
+    z-index: var(--zIndexOnTop);
 }
 
 .header .logo a {
@@ -36,7 +37,7 @@
     align-items: center;
 }
 
-.content input[type="text"] {
+.content .phone-input {
     border: none;
     outline: none;
     padding: 0 10px;
@@ -231,4 +232,8 @@ footer {
     font-size: var(--fontSizeTiny);
     font-weight: var(--fontWeightNormal);
     opacity: 0.6;
+    position: absolute;
+    bottom: 10px;
+    left: 0;
+    right: 0;
 }
