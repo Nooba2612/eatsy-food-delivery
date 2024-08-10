@@ -4,8 +4,8 @@
 /** variables **/
 :root {
     /* Colors */
-    --primaryColor: #FF914D;
-    --backgroundColor: #FCF1B7;
+    --primaryColor: #ff914d;
+    --backgroundColor: #fcf1b7;
     --whiteColor: #fff;
     --blackColor: #000;
     --borderColor: #b3b3b3;
@@ -120,6 +120,11 @@ select,
 textarea {
     background-color: transparent;
     outline: none;
+}
+
+input:-webkit-autofill {
+    -webkit-box-shadow: 0 0 0px 1000px white inset !important;
+    box-shadow: 0 0 0px 1000px white inset !important;
 }
 
 button {

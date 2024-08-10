@@ -1,12 +1,10 @@
 import React, { useEffect, useState } from "react";
 import classNames from "classnames/bind";
-import { Box, Container } from "@mui/material";
+import { Container } from "@mui/material";
 
 import styles from "./Home.module.css";
 
 const cx = classNames.bind(styles);
-
-import "../../constants/constants.js";
 
 function Home() {
   const [isAppear, setIsAppear] = useState(false);

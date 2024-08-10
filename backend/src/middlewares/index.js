@@ -8,6 +8,7 @@ const compression = require("compression");
 const session = require("express-session");
 const helmet = require("helmet");
 const passport = require("passport");
+
 const middlewares = (app) => {
     app.use(morgan("dev"));
     app.use(express.json());
