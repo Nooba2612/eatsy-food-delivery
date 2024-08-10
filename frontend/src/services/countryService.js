@@ -28,7 +28,7 @@ const getCountryName = async () =>
         })
         .catch((error) => {
             console.log("Fetch error: " + error);
-            throw erro;
+            throw error;
         });
 
 const getCountryId = async () =>
@@ -44,7 +44,7 @@ const getCountryId = async () =>
         })
         .catch((error) => {
             console.log("Fetch error: " + error);
-            throw erro;
+            throw error;
         });
 
 const getCountryFlag = async () =>
@@ -60,7 +60,7 @@ const getCountryFlag = async () =>
         })
         .catch((error) => {
             console.log("Fetch error: " + error);
-            throw erro;
+            throw error;
         });
 
 const countryService = { getAll, getCountryName, getCountryId, getCountryFlag };
