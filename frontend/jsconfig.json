@@ -4,6 +4,7 @@
         "paths": {
             "@images/*": ["./src/assets/images/*"],
             "@styles/*": ["./src/assets/styles/*"],
+            "@config/*": ["./src/config/*"],
             "@components/*": ["./src/components/*"],
             "@constants/*": ["./src/constants/*"],
             "@hooks/*": ["./src/hooks/*"],
@@ -11,7 +12,7 @@
             "@pages/*": ["./src/pages/*"],
             "@layouts/*": ["./src/layouts/*"],
             "@services/*": ["./src/services/*"],
-            "@utils/*": ["./src/utils/*"],
+            "@helpers/*": ["src/helpers/*"],
             "@router/*": ["./src/router/*"],
             "@features/*": ["./src/features/*"],
             "@store/*": ["./src/store/*"]

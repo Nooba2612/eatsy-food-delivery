@@ -9,7 +9,8 @@ const session = require("express-session");
 const helmet = require("helmet");
 const passport = require("passport");
 
-const middlewares = (app) => {
+const useMiddlewares = (app) => {
+    app.use(express.static(path.join(__dirname, "public")));
     app.use(morgan("dev"));
     app.use(express.json());
     app.use(express.urlencoded({ extended: false }));
@@ -18,17 +19,29 @@ const middlewares = (app) => {
     app.use(cookieParser());
     app.use(
         session({
-            secret: "keyboard cat",
+            secret: process.env.SESSION_SECRET_KEY,
             resave: false,
             saveUninitialized: true,
-            cookie: { secure: true },
+            cookie: {
+                secure: process.env.NODE_ENV === "production",
+                httpOnly: true, // prevent Javascript accession
+                maxAge: Number.parseInt(process.env.SESSION_MAX_AGE),
+                // sameSite: "Strict", // prevent exchange cookie from different sources
+                path: "/",
+            },
         }),
     );
-    app.use(cors());
+    app.use(
+        cors({
+            origin: process.env.CLIENT_URL,
+            credentials: true,
+        }),
+    );
     app.use(compression());
     app.use(helmet());
     app.use(passport.initialize());
     app.use(passport.session());
+    app.use(passport.authenticate("session"));
 };
 
-module.exports = middlewares;
+module.exports = useMiddlewares;
