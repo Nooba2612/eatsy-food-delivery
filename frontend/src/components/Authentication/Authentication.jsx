@@ -7,11 +7,7 @@ import useAuth from "@hooks/useAuth";
 function Authentication({ children }) {
     const { isAuthenticated } = useAuth();
 
-    if (!isAuthenticated) {
-        return <Navigate to="/login" />;
-    }
-
-    return children;
+    return isAuthenticated ? children : <Navigate to="/login" />;
 }
 
 export default Authentication;

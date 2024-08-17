@@ -1,24 +1,27 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import App from "./App.jsx";
 import reportWebVitals from "./reportWebVitals";
 import { Provider } from "react-redux";
-import store from "@store/store.js";
-import { GlobalStyles } from "@components/index.js";
-import { GoogleOAuthProvider } from "@react-oauth/google";
+import { PersistGate } from "redux-persist/integration/react";
 
+import App from "./App.jsx";
+import { GlobalStyles } from "@components/index.js";
+import { LoadingProvider } from "@contexts/loading.js";
+import { persistor, store } from "@store/store";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
 root.render(
     <React.StrictMode>
-        <GoogleOAuthProvider clientId={process.env.REACT_APP_GOOGLE_CLIENT_ID}>
-            <Provider store={store}>
+        <Provider store={store}>
+            <PersistGate persistor={persistor}>
                 <GlobalStyles>
-                    <App />
+                    <LoadingProvider>
+                        <App />
+                    </LoadingProvider>
                 </GlobalStyles>
-            </Provider>
-        </GoogleOAuthProvider>
+            </PersistGate>
+        </Provider>
     </React.StrictMode>,
 );
 

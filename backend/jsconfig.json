@@ -4,10 +4,11 @@
         "paths": {
             "@config/*": ["./src/config/*"],
             "@controllers/*": ["./src/controllers/*"],
-            "@middleware/*": ["src/middlewares/*"],
+            "@middlewares/*": ["./src/middlewares/*"],
             "@models/*": ["./src/models/*"],
             "@routes/*": ["./src/routes/*"],
             "@services/*": ["./src/services/*"],
+            "@helpers/*": ["src/services/*"],
             "@utils/*": ["./src/utils/*"],
             "@views/*": ["./src/views/*"],
             "@images/*": ["./src/images/*"],
