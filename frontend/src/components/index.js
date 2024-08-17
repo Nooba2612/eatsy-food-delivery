@@ -5,5 +5,6 @@ import GlobalStyles from "./GlobalStyles/GlobalStyles";
 import Header from "./Header/Header";
 import FormPhoneNumber from "./FormPhoneNumber/FormPhoneNumber";
 import FormOTP from "./FormOTP/FormOTP";
+import FormPassword from "./FormPassword/FormPassword";
 
-export { Authentication, Body, Footer, Header, GlobalStyles, FormPhoneNumber, FormOTP };
+export { Authentication, Body, Footer, Header, GlobalStyles, FormPhoneNumber, FormOTP, FormPassword };

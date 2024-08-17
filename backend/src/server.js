@@ -1,29 +1,21 @@
 const express = require("express");
-const path = require("path");
 const dotenv = require("dotenv");
-
-const routes = require("@routes/index");
-const middlewares = require("@middlewares/index");
-const { connectToDatabase } = require("@config/database");
-const createVerification = require("@config/verification");
 
 dotenv.config();
 
+const routes = require("@routes/index");
+const useMiddlewares = require("@middlewares/index");
+const { connectToDatabase } = require("@config/database");
+
 const app = express();
 
-// set up static files
-app.use(express.static(path.join(__dirname, "public")));
-
 // using middlewares
-middlewares(app);
+useMiddlewares(app);
 
 // routing
 routes(app);
 
-// verify service
-// createVerification();
-
 // connect to the database
-// connectToDatabase();
+connectToDatabase();
 
 module.exports = app;
