@@ -9,8 +9,9 @@
     --whiteColor: #fff;
     --blackColor: #000;
     --borderColor: #b3b3b3;
-    --alertColor: rgb(211, 44, 44);
+    --alertColor: #e02323;
     --disabledColor: #dad9d9;
+    --linkTextColor: rgb(38, 123, 220);
 
     /* Spacing */
     --spacingSmall: 8px;
@@ -21,10 +22,10 @@
     --fontFamily: "Montserrat", sans-serif;
     --fontWeightNormal: 500;
     --fontWeightBold: 700;
+    --fontSizeTiny: 0.75rem;
     --fontSizeSmall: 0.875rem;
     --fontSizeBase: 1rem;
     --fontSizeLarge: 1.2rem;
-    --fontSizeTiny: 0.75rem;
     --iconFontSize: 1.8rem;
 
     /* Dimensions */
@@ -140,4 +141,8 @@ body {
     font-size: 16px;
     line-height: 1;
     font-family: var(--fontFamily);
+}
+
+button:disabled {
+    cursor: no-drop;
 }

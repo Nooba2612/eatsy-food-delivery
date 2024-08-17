@@ -3,7 +3,7 @@ const authRouter = require("./authRouter");
 
 const routes = (app) => {
     app.use("/user", usersRouter);
-    app.use("/login", authRouter);
+    app.use("/auth", authRouter);
 };
 
 module.exports = routes;

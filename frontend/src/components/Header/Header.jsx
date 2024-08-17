@@ -14,7 +14,7 @@ function Header() {
     const [darkMode, setDarkmode] = useState(false);
 
     const handleChangeModeBtnClick = () => {
-        setDarkmode((prevMode) => !darkMode);
+        setDarkmode((prevMode) => !prevMode);
         if (darkMode) {
             document.body.classList.remove("dark-mode");
             document.body.classList.add("light-mode");
@@ -50,8 +50,6 @@ function Header() {
         return () => {
             window.removeEventListener("scroll", handleScroll);
         };
-
-        return () => {};
     }, []);
 
     return (

@@ -1,11 +1,15 @@
 const globals = require("globals");
 const pluginJs = require("@eslint/js");
+const reactPlugin = require("eslint-plugin-react");
 
 module.exports = [
     pluginJs.configs.recommended,
     {
-        files: ["**/*.js"],
+        files: ["**/*.js", "**/*.jsx"],
         ignores: ["**/*.test.js"],
+        plugins: {
+            react: reactPlugin,
+        },
         languageOptions: {
             globals: {
                 ...globals.browser,
@@ -22,6 +26,8 @@ module.exports = [
         rules: {
             "no-unused-vars": "warn",
             "no-undef": "error",
+            "react/jsx-uses-react": "error",
+            "react/jsx-uses-vars": "error",
             "no-useless-escape": "off",
             "no-inline-comments": "off",
         },

@@ -1,7 +1,4 @@
 const twilio = require("twilio");
-const dotenv = require("dotenv");
-
-dotenv.config();
 
 const accountSid = process.env.TWILIO_ACCOUNT_SID;
 const authToken = process.env.TWILIO_AUTH_TOKEN;
@@ -11,11 +8,11 @@ const client = twilio(accountSid, authToken);
 const createVerification = async (phoneNumber, otp) => {
     client.messages
         .create({
-            body: `Your Eatsy verification code is: ${otp}. This code will expire in 10 minutes.`,
+            body: `Mã xác thực Eatsy của bạn là: ${otp}. Mã này sẽ hết hạn trong vòng 10 phút. Vui lòng không cung cấp mã này cho người khác.`,
             messagingServiceSid: messagingServiceSid,
             to: phoneNumber,
         })
         .then((message) => console.log(message.sid));
 };
 
-module.exports = createVerification;
+module.exports = { createVerification };

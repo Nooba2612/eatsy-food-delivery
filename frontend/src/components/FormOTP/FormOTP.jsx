@@ -1,22 +1,56 @@
-import React, { Fragment, useState, useRef, useEffect } from "react";
+import React, { Fragment, useState, useRef, useEffect, memo } from "react";
 import PropTypes from "prop-types";
 import { Input as BaseInput } from "@mui/base/Input";
 import { Box, styled } from "@mui/system";
-import { Container } from "@mui/material";
-import axios from "axios";
 import classNames from "classnames/bind";
 
 import useLoading from "@hooks/useLoading";
 import { regexNumbers } from "@constants/constants";
 import styles from "@pages/Login/Login.module.css";
+import { FormPassword } from "@components/index";
+import axiosInstance from "@config/axiosInstance";
 
 const cx = classNames.bind(styles);
 
-function OTP({ separator, length, value, onChange }) {
+function OTP({ separator, length, value, onChange, setCurrentComponent, formData, setFormData, setIsExistUser }) {
     const inputRefs = useRef(new Array(length).fill(null));
+    const [isValidOTP, setIsValidOTP] = useState(true);
+    const { setLoading } = useLoading();
+    const handleSubmit = async (data) => {
+        setLoading(true);
+        try {
+            const res = await axiosInstance({
+                url: "/auth/verify-otp",
+                method: "post",
+                data: data,
+            });
 
-    const handleOnlyInputNumber = (e) => {
+            if (res.data.success) {
+                setCurrentComponent(FormPassword);
+                setIsValidOTP(true);
+                setLoading(false);
+
+                if (res.data.existUser) {
+                    setIsExistUser(true);
+                } else {
+                    setIsExistUser(false);
+                }
+            }
+        } catch (error) {
+            setIsValidOTP(false);
+            console.log(error);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const handleOnlyInputNumbers = (e) => {
         e.currentTarget.value = e.currentTarget.value.replace(regexNumbers, "");
+    };
+
+    const handleInput = (event, currentIndex) => {
+        handleOnlyInputNumbers(event);
+        setIsValidOTP(true);
     };
 
     const focusInput = (targetIndex) => {
@@ -87,16 +121,24 @@ function OTP({ separator, length, value, onChange }) {
                 break;
             }
         }
-        onChange((prev) => {
-            const otpArray = prev.split("");
-            const lastValue = currentValue[currentValue.length - 1];
-            otpArray[indexToEnter] = lastValue;
-            return otpArray.join("");
-        });
+
+        const otpArray = value.split("");
+        const lastValue = currentValue[currentValue.length - 1];
+        otpArray[indexToEnter] = lastValue;
+
+        onChange(otpArray.join(""));
+
         if (currentValue !== "") {
             if (currentIndex < length - 1) {
                 focusInput(currentIndex + 1);
             }
+        }
+
+        if (currentIndex + 1 === length) {
+            setFormData((prev) => {
+                return { ...prev, otp: value };
+            });
+            handleSubmit({ ...formData, otp: otpArray.join("") });
         }
     };
 
@@ -130,17 +172,25 @@ function OTP({ separator, length, value, onChange }) {
             }
 
             onChange(otpArray.join(""));
+
+            if (otpArray.join("").length === length) {
+                setFormData((prev) => {
+                    return { ...prev, otp: value };
+                });
+                handleSubmit({ ...formData, otp: otpArray.join("") });
+            }
         }
     };
 
     return (
-        <Box sx={{ display: "flex", gap: 1, alignItems: "center" }}>
+        <Box sx={{ display: "flex", gap: 1, alignItems: "center", width: "100%", justifyContent: "space-between" }}>
             {new Array(length).fill(null).map((_, index) => (
                 <Fragment key={index}>
                     <BaseInput
                         slots={{
                             input: InputElement,
                         }}
+                        className={cx({ "invalid-otp": !isValidOTP })}
                         aria-label={`Digit ${index + 1} of OTP`}
                         slotProps={{
                             input: {
@@ -151,7 +201,7 @@ function OTP({ separator, length, value, onChange }) {
                                 onChange: (event) => handleChange(event, index),
                                 onClick: (event) => handleClick(event, index),
                                 onPaste: (event) => handlePaste(event, index),
-                                onInput: (event) => handleOnlyInputNumber(event),
+                                onInput: (event) => handleInput(event, index),
                                 value: value[index] ?? "",
                             },
                         }}
@@ -168,50 +218,112 @@ OTP.propTypes = {
     onChange: PropTypes.func.isRequired,
     separator: PropTypes.node,
     value: PropTypes.string.isRequired,
+    setCurrentComponent: PropTypes.func,
+    setIsExistUser: PropTypes.func,
+    formData: PropTypes.object,
+    setFormData: PropTypes.func,
 };
 
-function FormOTP() {
+function FormOTP({ setCurrentComponent, formData, setFormData, setIsExistUser }) {
     const [otp, setOtp] = useState("");
+    const [disabledBtn, setDisabledBtn] = useState(true);
+    const resendOTPBtn = useRef();
     const { setLoading } = useLoading();
 
-    useEffect(() => {
+    const countdownTimetoResend = () => {
+        let currentSecond = 29;
+        const countdown = setInterval(() => {
+            if (resendOTPBtn.current) {
+                resendOTPBtn.current.innerText = `Gửi lại OTP sau 00:${
+                    currentSecond < 10 ? "0" + currentSecond : currentSecond
+                } giây`;
+                setDisabledBtn(true);
+                currentSecond -= 1;
+            }
+            if (currentSecond < 0) {
+                resendOTPBtn.current.innerText = `Gửi lại OTP`;
+                setDisabledBtn(false);
+                clearInterval(countdown);
+            }
+        }, 1000);
+    };
+    const handleResendOTPBtnClick = async () => {
+        countdownTimetoResend();
+        setLoading(true);
         try {
-            axios
-                .post(`${process.env.REACT_APP_SERVER_BASE_URL}/login`, otp)
-                .then((res) => {
-                    setLoading(true);
-                    console.log(res);
-                })
-                .catch((err) => {
-                    console.log(err);
-                })
-                .finally(() => {
-                    setLoading(false);
-                });
+            const res = await axiosInstance({
+                url: "/auth/send-otp",
+                method: "post",
+                data: {
+                    ...formData,
+                    resendOTP: true,
+                },
+            });
+
+            if (res.data.success) {
+                setLoading(false);
+            }
         } catch (error) {
             console.log(error);
+        } finally {
+            setLoading(false);
         }
+    };
 
-        return () => {};
-    }, [otp, setLoading]);
+    useEffect(() => {
+        let currentSecond = 29;
+        const countdown = setInterval(() => {
+            if (resendOTPBtn.current) {
+                resendOTPBtn.current.innerText = `Gửi lại OTP sau 00:${
+                    currentSecond < 10 ? "0" + currentSecond : currentSecond
+                } giây`;
+                setDisabledBtn(true);
+                currentSecond -= 1;
+            }
+            if (currentSecond < 0) {
+                resendOTPBtn.current.innerText = `Gửi lại OTP`;
+                setDisabledBtn(false);
+                clearInterval(countdown);
+            }
+        }, 1000);
+    }, []);
 
     return (
         <Box
             sx={{
                 display: "flex",
-                justifyContent: "center",
+                justifyContent: "space-between",
                 alignItems: "center",
                 flexDirection: "column",
                 gap: 2,
                 marginTop: "100px",
             }}
         >
-            <div className={cx("title")}>
+            <div className={cx("title")} style={{ marginBottom: "10px" }}>
                 <h1>Xác minh OTP</h1>
-                <h6>Nhập mã gồm 6 chữ số mà chúng tôi đã gửi đến +84 0328906284. Hết hạn sau 90 giây.</h6>
+                <h6 style={{ lineHeight: "20px" }}>
+                    Nhập mã gồm 6 chữ số mà chúng tôi đã gửi đến +84 {formData.phone}. Hết hạn sau 10 phút.
+                </h6>
             </div>
-            <OTP separator={<span></span>} value={otp} onChange={setOtp} length={6} />
-            <button type="button"></button>
+            <OTP
+                separator={<span></span>}
+                value={otp}
+                onChange={setOtp}
+                length={6}
+                setCurrentComponent={setCurrentComponent}
+                setFormData={setFormData}
+                formData={formData}
+                setIsExistUser={setIsExistUser}
+            />
+            <button
+                onClick={handleResendOTPBtnClick}
+                className={cx("resend-otp-btn", { disabled: disabledBtn })}
+                disabled={disabledBtn}
+                ref={resendOTPBtn}
+                type="button"
+            >
+                Gửi lại OTP sau 00:30 giây
+            </button>
         </Box>
     );
 }
@@ -240,33 +352,40 @@ const grey = {
 
 const InputElement = styled("input")(
     ({ theme }) => `
-  width: 40px;
-  font-family: 'IBM Plex Sans', sans-serif;
-  font-size: var(--fontSizeBase);
-  font-weight: var(--fontWeightBold);
-  line-height: 1.5;
-  padding: 15px 0px;
-  border-radius: var(--borderRadiusMedium);
-  text-align: center;
-  color: ${theme.palette.mode === "dark" ? grey[300] : "var(--blackColor)"};
-  background: ${theme.palette.mode === "dark" ? grey[900] : "#fff"};
-  border: 1px solid ${theme.palette.mode === "dark" ? grey[700] : "var(--borderColor)"};
-  box-shadow: 0px 2px 4px ${theme.palette.mode === "dark" ? "rgba(0,0,0, 0.5)" : "rgba(0,0,0, 0.05)"};
+        width: 40px;
+        font-family: 'IBM Plex Sans', sans-serif;
+        font-size: var(--fontSizeBase);
+        font-weight: var(--fontWeightBold);
+        line-height: 1.5;
+        padding: 15px 0px;
+        border-radius: var(--borderRadiusMedium);
+        text-align: center;
+        color: ${theme.palette.mode === "dark" ? grey[300] : "var(--blackColor)"};
+        background: ${theme.palette.mode === "dark" ? grey[900] : "#fff"};
+        border: 1px solid ${theme.palette.mode === "dark" ? grey[700] : "var(--borderColor)"};
+        box-shadow: 0px 2px 4px ${theme.palette.mode === "dark" ? "rgba(0,0,0, 0.5)" : "rgba(0,0,0, 0.05)"};
 
-  &:hover {
-    border-color: var(--primaryColor);
-  }
+        &:hover {
+            border-color: var(--primaryColor);
+        }
 
-  &:focus {
-    border-color: var(--primaryColor);
-    box-shadow: 0 0 0 3px ${theme.palette.mode === "dark" ? blue[600] : "var(--primaryColor)"};
-  }
+        &:focus {
+            border-color: var(--primaryColor);
+            box-shadow: 0 0 0 3px ${theme.palette.mode === "dark" ? blue[600] : "var(--primaryColor)"};
+        }
 
-  // firefox
-  &:focus-visible {
-    outline: 0;
-  }
+        // firefox
+        &:focus-visible {
+            outline: 0;
+        }
 `,
 );
 
-export default FormOTP;
+FormOTP.propTypes = {
+    formData: PropTypes.object,
+    setFormData: PropTypes.func,
+    setCurrentComponent: PropTypes.func,
+    setIsExistUser: PropTypes.func,
+};
+
+export default memo(FormOTP);

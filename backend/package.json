@@ -2,7 +2,6 @@
     "name": "eatsy_food_delivery_backend",
     "version": "1.0.0",
     "private": true,
-    "type": "module",
     "scripts": {
         "start": "nodemon --inspect ./bin/www --exec babel-node",
         "build": "webpack --mode=production --node-env=production",
