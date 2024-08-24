@@ -3,6 +3,8 @@ import classNames from "classnames/bind";
 import { Container } from "@mui/material";
 
 import styles from "./Home.module.css";
+import { BestSeller } from "@components/index";
+
 
 const cx = classNames.bind(styles);
 
@@ -81,6 +83,7 @@ function Home() {
                     </div>
                 </div>
             </Container>
+            <BestSeller />
             <div className={cx("menu")}></div>
             <div className={cx("discount")}></div>
         </div>
