@@ -1,18 +1,13 @@
 import axios from "axios";
 
-const getCookie = (name) => {
-    const value = `; ${document.cookie}`;
-    const parts = value.split(`; ${name}=`);
-    if (parts.length === 2) return parts.pop().split(";").shift();
-};
+import { getCookie } from "@helpers/cookieHelper";
 
-// Get token from cookie
 const token = getCookie("token");
 
 // Configure can exchange cookie
 axios.defaults.withCredentials = true;
 
-axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+axios.defaults.headers.common["Authorization"] = token ? `Bearer ${token}` : "";
 
 // Create instance Axios for global config
 const axiosInstance = axios.create({
@@ -22,5 +17,25 @@ const axiosInstance = axios.create({
         "Content-Type": "application/json",
     },
 });
+
+// axiosInstance.interceptors.response.use(
+//     (response) => response,
+//     (error) => {
+//         if (error.response && (error.response.status === 401 || error.response.status === 403)) {
+//             window.location.href = "/login";
+//         }
+//         return Promise.reject(error);
+//     },
+// );
+
+axiosInstance.interceptors.request.use(
+    (config) => {
+        if (token) {
+            config.headers["Authorization"] = `Bearer ${token}`;
+        }
+        return config;
+    },
+    (error) => Promise.reject(error),
+);
 
 export default axiosInstance;

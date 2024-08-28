@@ -2,9 +2,12 @@ import React, { useEffect, useState } from "react";
 import classNames from "classnames/bind";
 import { Link } from "react-router-dom";
 import { DarkMode, Search, Login, ShoppingCart, LightMode } from "@mui/icons-material";
-import { Box, Container } from "@mui/material";
+import { Avatar, Box, Container } from "@mui/material";
 
 import styles from "./Header.module.css";
+import useAuth from "@hooks/useAuth";
+import { getFirstLetterOfEachWord } from "@helpers/stringHelper";
+import { getUserInfo } from "@helpers/cookieHelper";
 
 const cx = classNames.bind(styles);
 
@@ -12,6 +15,8 @@ function Header() {
     const [backgroundColor, setBackgroundColor] = useState("transparent");
     const [activeKey, setActiveKey] = useState("1");
     const [darkMode, setDarkmode] = useState(false);
+    const { isAuthenticated } = useAuth();
+    const user = getUserInfo();
 
     const handleChangeModeBtnClick = () => {
         setDarkmode((prevMode) => !prevMode);
@@ -62,35 +67,35 @@ function Header() {
                     <nav className={cx("nav-bar")}>
                         <ul>
                             <li
-                                data-nav-index={1}
+                                data-nav-index={"1"}
                                 onClick={(e) => setActiveKey(e.currentTarget.getAttribute("data-nav-index"))}
                                 className={cx({ active: activeKey === "1" ? true : false })}
                             >
                                 <Link to={"/"}>Home</Link>
                             </li>
                             <li
-                                data-nav-index={2}
+                                data-nav-index={"2"}
                                 onClick={(e) => setActiveKey(e.currentTarget.getAttribute("data-nav-index"))}
                                 className={cx({ active: activeKey === "2" ? true : false })}
                             >
                                 <Link to={"/menu"}>Menu</Link>
                             </li>
                             <li
-                                data-nav-index={3}
+                                data-nav-index={"3"}
                                 onClick={(e) => setActiveKey(e.currentTarget.getAttribute("data-nav-index"))}
                                 className={cx({ active: activeKey === "3" ? true : false })}
                             >
                                 <Link to={"/offers"}>Offers</Link>
                             </li>
                             <li
-                                data-nav-index={4}
+                                data-nav-index={"4"}
                                 onClick={(e) => setActiveKey(e.currentTarget.getAttribute("data-nav-index"))}
                                 className={cx({ active: activeKey === "4" ? true : false })}
                             >
                                 <Link to={"/about"}>About</Link>
                             </li>
                             <li
-                                data-nav-index={5}
+                                data-nav-index={"5"}
                                 onClick={(e) => setActiveKey(e.currentTarget.getAttribute("data-nav-index"))}
                                 className={cx({ active: activeKey === "5" ? true : false })}
                             >
@@ -110,11 +115,28 @@ function Header() {
                                 <span className={cx("cart-badge")}>0</span>
                             </Link>
                         </button>
-                        <button className={cx("login-btn")}>
-                            <Link to={"/login"}>
-                                <Login /> <span>Login</span>
-                            </Link>
-                        </button>
+                        {isAuthenticated ? (
+                            <button className={cx("profile-btn")}>
+                                <Avatar
+                                    sx={{
+                                        fontSize: "var(--fontSizeTiny)",
+                                        backgroundColor: "var(--backgroundColor)",
+                                        color: "var(--blackColor)",
+                                        border: "1px solid var(--borderColor)",
+                                        fontWeight: "var(--fontWeightBold)",
+                                        marginBottom: "10px",
+                                    }}
+                                    {...getFirstLetterOfEachWord(user?.name || "")}
+                                    src={user?.avatar || ""}
+                                />
+                            </button>
+                        ) : (
+                            <button className={cx("login-btn")}>
+                                <Link to={"/login"}>
+                                    <Login /> <span>Login</span>
+                                </Link>
+                            </button>
+                        )}
                         <button className={cx("change-mode-btn")} onClick={handleChangeModeBtnClick}>
                             {darkMode ? <LightMode /> : <DarkMode />}
                         </button>

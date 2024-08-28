@@ -1,18 +1,64 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import classNames from "classnames/bind";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { CopyrightRounded } from "@mui/icons-material";
 import { Container } from "@mui/material";
 
 import styles from "./Login.module.css";
 import { FormPhoneNumber } from "@components/index";
+import axiosInstance from "@config/axiosInstance";
+import useAuth from "@hooks/useAuth";
+import { getCookie } from "@helpers/cookieHelper";
 
 const cx = classNames.bind(styles);
 
 function Login() {
     const [CurrentComponent, setCurrentComponent] = useState(FormPhoneNumber);
-    const [formData, setFormData] = useState({});
+    const [formData, setFormData] = useState({ memorizedLogin: false });
     const [isExistUser, setIsExistUser] = useState(true);
+    const navigate = useNavigate();
+    const { isAuthenticated, login, logout } = useAuth();
+
+    useEffect(() => {
+        const loginChannel = new BroadcastChannel("login_channel");
+
+        loginChannel.addEventListener("message", (e) => {
+            if (e.data.success) {
+                login();
+                navigate("/");
+            } else {
+                navigate("/login");
+                logout();
+            }
+            window.location.reload();
+        });
+
+        return () => {
+            loginChannel.close();
+        };
+    }, []);
+
+    useEffect(() => {
+        const authenticate = async () => {
+            try {
+                if (getCookie("token")) {
+                    const res = await axiosInstance({
+                        url: "/auth",
+                        method: "get",
+                    });
+                    if (res.data.success && isAuthenticated) {
+                        navigate("/");
+                    } else {
+                        navigate("/login");
+                    }
+                }
+            } catch (error) {
+                console.log(error);
+            }
+        };
+
+        authenticate();
+    }, []);
 
     return (
         <>

@@ -20,7 +20,7 @@ import {
     Contact,
     Offers,
 } from "@pages/index";
-import { Authentication } from "@components/index";
+import { Authentication, LoginStatus } from "@components/index";
 import DefaultLayout from "@layouts/DefaultLayout";
 
 const publicRoutes = [
@@ -64,6 +64,10 @@ const publicRoutes = [
         path: "/login",
         element: <Login />,
     },
+    {
+        path: "/login/status",
+        element: <LoginStatus />,
+    },
 ];
 
 const privateRoutes = [
@@ -102,6 +106,10 @@ const privateRoutes = [
             {
                 path: "/chat",
                 element: <Chat />,
+            },
+            {
+                path: "/order",
+                element: <Order />,
             },
         ],
     },

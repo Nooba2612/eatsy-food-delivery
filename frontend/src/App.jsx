@@ -1,11 +1,14 @@
-import React, { useCallback, useContext } from "react";
+import React, { useEffect } from "react";
 import { RouterProvider } from "react-router-dom";
 import { CircularProgress } from "@mui/material";
 
 import router from "@router/router";
 import useLoading from "@hooks/useLoading";
+
 function App() {
     const { loading } = useLoading();
+    
+
     return (
         <>
             {loading && (
