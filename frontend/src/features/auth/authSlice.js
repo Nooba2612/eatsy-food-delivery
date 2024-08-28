@@ -14,8 +14,12 @@ const authSlice = createSlice({
         logout: (state) => {
             state.isAuthenticated = false;
         },
+        clearCookie: () => {
+            const now = new Date().toUTCString();
+            document.cookie = `token=; expires=${now}; path=/;`;
+        },
     },
 });
 
-export const { login, logout } = authSlice.actions;
+export const { login, logout, clearCookie } = authSlice.actions;
 export default authSlice.reducer;

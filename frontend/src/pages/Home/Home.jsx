@@ -17,7 +17,9 @@ function Home() {
 
     useEffect(() => {
         window.addEventListener("scroll", lazyLoading);
-        return () => {};
+        return () => {
+            window.removeEventListener("scroll", lazyLoading);
+        };
     }, []);
 
     return (

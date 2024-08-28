@@ -8,6 +8,7 @@ const compression = require("compression");
 const session = require("express-session");
 const helmet = require("helmet");
 const passport = require("passport");
+const { usePassportLocalStrategy, usePassportGoogleStrategy, usePassportFacebookStrategy } = require("@config/passport");
 
 const useMiddlewares = (app) => {
     app.use(express.static(path.join(__dirname, "public")));
@@ -25,8 +26,8 @@ const useMiddlewares = (app) => {
             cookie: {
                 secure: process.env.NODE_ENV === "production",
                 httpOnly: true, // prevent Javascript accession
-                maxAge: Number.parseInt(process.env.SESSION_MAX_AGE),
-                // sameSite: "Strict", // prevent exchange cookie from different sources
+                maxAge: Number.parseInt(process.env.COOKIE_MAX_AGE_1H),
+                sameSite: "Strict", // prevent CSRF attack
                 path: "/",
             },
         }),
@@ -42,6 +43,9 @@ const useMiddlewares = (app) => {
     app.use(passport.initialize());
     app.use(passport.session());
     app.use(passport.authenticate("session"));
+    usePassportLocalStrategy(passport);
+    usePassportGoogleStrategy(passport);
+    usePassportFacebookStrategy(passport)
 };
 
 module.exports = useMiddlewares;

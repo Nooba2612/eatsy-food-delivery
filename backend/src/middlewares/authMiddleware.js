@@ -3,7 +3,10 @@ const jwt = require("jsonwebtoken");
 const authMiddleware = (req, res, next) => {
     const jwtSecretKey = process.env.JWT_SECRET_KEY;
 
-    const token = req.session.token;
+    // const token = req.cookies.token;
+    const token = req.header("Authorization") && req.header("Authorization").split(" ")[1];
+
+    console.log("🚀  token:", token);
 
     if (!token) {
         return res.status(401).json({ success: false, message: "Unauthorized: No token provided" });
@@ -13,11 +16,6 @@ const authMiddleware = (req, res, next) => {
         if (err) {
             return res.status(403).json({ success: false, message: "Invalid or expired token" });
         }
-
-        // Check admin role
-        // if (decoded.role !== "admin") {
-        //     return res.status(403).json({ success: false, message: "Access denied: Admins only" });
-        // }
 
         req.user = decoded;
         next();

@@ -30,6 +30,7 @@ module.exports = [
             "react/jsx-uses-vars": "error",
             "no-useless-escape": "off",
             "no-inline-comments": "off",
+            "no-unused-expressions": "error",
         },
     },
 ];
