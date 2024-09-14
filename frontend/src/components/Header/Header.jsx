@@ -12,7 +12,7 @@ import { getUserInfo } from "@helpers/cookieHelper";
 const cx = classNames.bind(styles);
 
 function Header() {
-    const [backgroundColor, setBackgroundColor] = useState("transparent");
+    const [backgroundColor, setBackgroundColor] = useState("var(--backgroundColor)");
     const [activeKey, setActiveKey] = useState("1");
     const [darkMode, setDarkmode] = useState(false);
     const { isAuthenticated } = useAuth();
@@ -120,11 +120,15 @@ function Header() {
                                 <Avatar
                                     sx={{
                                         fontSize: "var(--fontSizeTiny)",
-                                        backgroundColor: "var(--backgroundColor)",
+                                        backgroundColor:
+                                            backgroundColor === "var(--whiteColor)"
+                                                ? "var(--backgroundColor)"
+                                                : "var(--whiteColor)",
                                         color: "var(--blackColor)",
                                         border: "1px solid var(--borderColor)",
                                         fontWeight: "var(--fontWeightBold)",
                                         marginBottom: "10px",
+                                        transition: "all 0.2s linear",
                                     }}
                                     {...getFirstLetterOfEachWord(user?.name || "")}
                                     src={user?.avatar || ""}
