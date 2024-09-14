@@ -36,7 +36,7 @@ export const topten = [
   },
   {
     id: 1313133323,
-    Name: "Name of 1",
+    Name: "Name of 2",
     image: seller_1,
     decription:
       " mollitia doloremque. Doloremque dolores commodi aperiam dicta.",
@@ -46,7 +46,7 @@ export const topten = [
 
   {
     id: 1313133323,
-    Name: "Name of 1",
+    Name: "Name of 3",
     image: seller_1,
     decription:
       " mollitia doloremque. Doloremque dolores commodi aperiam dicta.",
@@ -56,7 +56,7 @@ export const topten = [
 
   {
     id: 1313133323,
-    Name: "Name of 1",
+    Name: "Name of 4",
     image: seller_1,
     decription:
       " mollitia doloremque. Doloremque dolores commodi aperiam dicta.",
@@ -66,7 +66,7 @@ export const topten = [
 
   {
     id: 1313133323,
-    Name: "Name of 1",
+    Name: "Name of 5",
     image: seller_1,
     decription:
       " mollitia doloremque. Doloremque dolores commodi aperiam dicta.",
@@ -76,7 +76,7 @@ export const topten = [
 
   {
     id: 1313133323,
-    Name: "Name of 1",
+    Name: "Name of 6",
     image: seller_1,
     decription:
       " mollitia doloremque. Doloremque dolores commodi aperiam dicta.",
@@ -85,7 +85,7 @@ export const topten = [
   },
   {
     id: 1313133323,
-    Name: "Name of 1",
+    Name: "Name of 7",
     image: seller_today,
     decription:
       " mollitia doloremque. Doloremque dolores commodi aperiam dicta.",
