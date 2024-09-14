@@ -7,7 +7,7 @@ import classNames from "classnames/bind";
 import useLoading from "@hooks/useLoading";
 import { regexNumbers } from "@constants/constants";
 import styles from "@pages/Login/Login.module.css";
-import { FormPassword } from "@components/index";
+import { FormPassword, FormUserName } from "@components/index";
 import axiosInstance from "@config/axiosInstance";
 
 const cx = classNames.bind(styles);
@@ -26,14 +26,15 @@ function OTP({ separator, length, value, onChange, setCurrentComponent, formData
             });
 
             if (res.data.success) {
-                setCurrentComponent(FormPassword);
                 setIsValidOTP(true);
                 setLoading(false);
 
                 if (res.data.existUser) {
                     setIsExistUser(true);
+                    setCurrentComponent(FormPassword);
                 } else {
                     setIsExistUser(false);
+                    setCurrentComponent(FormUserName);
                 }
             }
         } catch (error) {

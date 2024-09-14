@@ -25,6 +25,7 @@ function FormPassword({ setFormData, formData, isExistUser }) {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+
         setLoading(true);
         try {
             const res = await axiosInstance({
@@ -37,10 +38,10 @@ function FormPassword({ setFormData, formData, isExistUser }) {
             });
 
             if (res.data.success) {
-                navigate(res.data.redirect);
-                setIsValidPassword(true);
-                console.log(document.cookie);
                 login();
+                setIsValidPassword(true);
+                navigate(res.data.redirect);
+                window.location.reload();
             } else {
                 setIsValidPassword(false);
                 setPasswordAlertMessage("Mật khẩu chưa đúng.");
@@ -49,12 +50,6 @@ function FormPassword({ setFormData, formData, isExistUser }) {
             console.log(error);
         } finally {
             setLoading(false);
-        }
-    };
-
-    const handleKeyDown = (e) => {
-        if (e.keyCode === 13) {
-            formRef.current.submit;
         }
     };
 
@@ -129,7 +124,7 @@ function FormPassword({ setFormData, formData, isExistUser }) {
                 marginTop: "100px",
             }}
         >
-            <form ref={formRef} onSubmit={handleSubmit} onKeyDown={handleKeyDown}>
+            <form ref={formRef} onSubmit={handleSubmit}>
                 <div className={cx("title")} style={{ marginBottom: "10px" }}>
                     <h1>{isExistUser ? "Nhập mật khẩu" : "Tạo mật khẩu mới"}</h1>
                     <h4>

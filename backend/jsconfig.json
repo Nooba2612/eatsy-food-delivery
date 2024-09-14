@@ -8,7 +8,7 @@
             "@models/*": ["./src/models/*"],
             "@routes/*": ["./src/routes/*"],
             "@services/*": ["./src/services/*"],
-            "@helpers/*": ["src/services/*"],
+            "@helpers/*": ["./src/helpers/*"],
             "@utils/*": ["./src/utils/*"],
             "@views/*": ["./src/views/*"],
             "@images/*": ["./src/images/*"],

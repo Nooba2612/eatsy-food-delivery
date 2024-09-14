@@ -1,30 +1,30 @@
-const { createVerification } = require("@config/otp-sms");
-const { saveOTP, generateOTP, checkOTP, deleteOTP } = require("@services/otp");
-const { comparePassword, hashPassword } = require("@services/password");
-const { getUser, createUser } = require("@services/user");
-const { generateJWT } = require("@services/jwt");
+const { v4: uuidv4 } = require("uuid");
+
+const { createVerification } = require("@config/twilio");
+const { saveOTP, generateOTP, checkOTP, deleteOTP } = require("@helpers/otpHelper");
+const { getUserByPhone, createUser, compareData, hashData, getUserById } = require("@helpers/userHelper");
+const { generateJWT } = require("@helpers/jwtHelper");
 
 class authController {
     async sendOTP(req, res) {
         try {
             const { phone, country, resendOTP } = req.body;
+            const { countryCode } = country;
 
             if (!phone || !country) {
                 res.status(400).json({ success: false, message: "Failed to send OTP" });
             }
 
-            const phoneNumber = country.countryCode + phone;
-
             if (resendOTP) {
-                await deleteOTP(phoneNumber);
+                await deleteOTP(countryCode, phone);
             }
 
             const otp = generateOTP();
 
             console.log("\n\nSent OTP: ", otp);
 
-            saveOTP(phoneNumber, otp);
-            // createVerification(phoneNumber, otp);
+            saveOTP(countryCode, phone, otp);
+            // createVerification(countryCode + phone, otp);
 
             res.status(200).json({ success: true });
         } catch (error) {
@@ -36,15 +36,16 @@ class authController {
     async verifyOTP(req, res) {
         try {
             const { otp, phone, country } = req.body;
+            const { countryCode } = country;
 
             if (!otp || !phone || !country) {
                 return res.status(400).json({ success: false, message: "Missing required fields" });
             }
 
-            const phoneNumber = country.countryCode + phone;
-            const user = await getUser(phoneNumber);
+            const user = await getUserByPhone(countryCode, phone);
 
-            const isValidOTP = await checkOTP(phoneNumber, otp);
+            const isValidOTP = await checkOTP(countryCode, phone, otp);
+            console.log("🚀  isValidOTP:", isValidOTP);
 
             if (isValidOTP) {
                 return res
@@ -61,28 +62,32 @@ class authController {
 
     async loginUser(req, res) {
         try {
-            const { phone, country, password } = req.body;
+            const { phone, country, password, memorizedLogin } = req.body;
+            const { countryCode } = country;
+
             if (!phone || !country || !password) {
                 return res.status(400).json({ success: false, message: "Missing required fields" });
             }
 
-            const phoneNumber = country.countryCode + phone;
-            const user = await getUser(phoneNumber);
+            const user = await getUserByPhone(countryCode, phone); // get user from DB
+            console.log("🐸  user:", user);
 
             if (!user) {
                 return res.status(404).json({ success: false, message: "User not found" });
             }
 
-            const isValidPassword = await comparePassword(password, user.password);
+            const isValidPassword = await compareData(password, user.password);
 
             if (!isValidPassword) {
                 return res.json({ success: false, message: "Login user failed" });
             }
 
-            const token = generateJWT(user);
-            console.log("🚀  JWT:", token);
-
-            res.cookie("token", token); // send token to the client
+            const jwtExpiresIn =
+                memorizedLogin === "true" ? process.env.JWT_EXPIRES_IN_30D : process.env.JWT_EXPIRES_IN_1H;
+            const cookieMaxAge =
+                memorizedLogin === "true" ? process.env.COOKIE_MAX_AGE_30D : process.env.COOKIE_MAX_AGE_1H;
+            const token = generateJWT(user, jwtExpiresIn); // create token
+            res.cookie("token", token, { maxAge: parseInt(cookieMaxAge) }); // send token to the client
 
             return res.status(200).json({ success: true, message: "User login successfully", redirect: "/" });
         } catch (error) {
@@ -93,41 +98,72 @@ class authController {
 
     async registerUser(req, res) {
         try {
-            const { phone, country, password } = req.body;
+            const { username, phone, country, password, memorizedLogin } = req.body;
+            const { countryCode } = country;
 
-            if (!phone || !country || !password) {
+            if (!username || !phone || !country || !password) {
                 return res.status(400).json({ success: false, message: "Missing required fields" });
             }
 
-            const phoneNumber = country.countryCode + phone;
-            const hashedPassword = await hashPassword(password);
+            const hashedPassword = await hashData(password);
 
-            if (await createUser(phoneNumber, hashedPassword)) {
-                return res.status(200).json({ success: true, message: "User registered successfully", redirect: "/" });
-            } else {
+            await createUser(username, countryCode, phone, hashedPassword); // add user to DB
+
+            const user = await getUserByPhone(countryCode, phone); // get user from DB
+
+            if (!user) {
                 return res.status(400).json({ success: false, message: "Register user failed" });
             }
+
+            const jwtExpiresIn =
+                memorizedLogin === "true" ? process.env.JWT_EXPIRES_IN_30D : process.env.JWT_EXPIRES_IN_1H;
+            const cookieMaxAge =
+                memorizedLogin === "true" ? process.env.COOKIE_MAX_AGE_30D : process.env.COOKIE_MAX_AGE_1H;
+            const token = generateJWT(user, jwtExpiresIn); // create token
+            res.cookie("token", token, { maxAge: parseInt(cookieMaxAge) }); // send token to the client
+            return res.status(200).json({ success: true, message: "User registered successfully", redirect: "/" });
         } catch (error) {
             console.log(error);
             return res.status(500).json({ success: false, message: "Internal server error" });
         }
     }
 
-    async authenticateUser(req, res) {
+    async logoutUser(req, res) {
         try {
-            console.log(req.session.user);
-            if (req.session.user) {
-                res.status(200).json(req.session.user);
-            } else {
-                res.status(401).send("Not authenticated");
+            const token = req.cookies.token;
+
+            if (!token) {
+                return res.status(400).json({ success: false, message: "No token provided" });
             }
+
+            res.clearCookie("token");
+            return res.status(200).json({ success: true, message: "Logged out successfully" });
         } catch (error) {
             console.log(error);
         }
     }
 
-    async authenticateToken(req, res) {
-        
+    async loginStatus(req, res) {
+        try {
+            const userId = req.user.id;
+            const user = await getUserById(userId);
+            const { memorizedLogin } = req.cookies;
+
+            if (!user) {
+                return res.status(401).json({ success: false, message: "Unauthorized" });
+            }
+
+            const jwtExpiresIn =
+                memorizedLogin === "true" ? process.env.JWT_EXPIRES_IN_30D : process.env.JWT_EXPIRES_IN_1H;
+            const cookieMaxAge =
+                memorizedLogin === "true" ? process.env.COOKIE_MAX_AGE_30D : process.env.COOKIE_MAX_AGE_1H;
+            const token = generateJWT(user, jwtExpiresIn); // create token
+            res.cookie("token", token, { maxAge: parseInt(cookieMaxAge) }); // send token to the client
+            res.clearCookie("memorizedLogin");
+            return res.json({ success: true, message: "Login successful!" });
+        } catch (error) {
+            console.log(error);
+        }
     }
 }
 

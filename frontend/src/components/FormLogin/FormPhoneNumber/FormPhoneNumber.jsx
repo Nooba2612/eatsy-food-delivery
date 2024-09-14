@@ -31,7 +31,8 @@ function FormPhoneNumber({ setCurrentComponent, setFormData, formData }) {
     const [alertMessage, setAlertMessage] = useState();
     const [phoneNumberValue, setPhoneNumberValue] = useState();
     const formRef = useRef();
-
+    const serverBaseUrl = process.env.REACT_APP_SERVER_BASE_URL;
+    const clientBaseUrl = process.env.REACT_APP_CLIENT_BASE_URL;
     const { setLoading } = useLoading();
 
     const handleCountryChange = (e) => {
@@ -63,6 +64,10 @@ function FormPhoneNumber({ setCurrentComponent, setFormData, formData }) {
             e.currentTarget.parentElement.classList.remove(styles.invalid);
             setIsValidPhoneNumber(true);
         }
+    };
+
+    const handleMemorizedLoginChange = () => {
+        setFormData((prevData) => ({ ...prevData, memorizedLogin: !formData.memorizedLogin }));
     };
 
     const handleSubmit = async (event) => {
@@ -99,10 +104,77 @@ function FormPhoneNumber({ setCurrentComponent, setFormData, formData }) {
         }
     };
 
-    const handleKeyDown = (e) => {
-        if (e.keyCode === 13) {
-            formRef.current.submit;
+    const handleLoginWithGoogle = async () => {
+        const width = 500;
+        const height = 800;
+        const left = screen.width / 2 - width / 2;
+        const top = screen.height / 2 - height / 2;
+
+        // Open google login popup
+        const popup = window.open(
+            `${serverBaseUrl}/auth/google`,
+            "_blank",
+            `width=${width},height=${height},top=${top},left=${left}`,
+        );
+
+        if (!popup) {
+            console.error("Failed to open pop-up window");
+            return;
         }
+
+        try {
+            await axiosInstance({
+                url: "/auth/google",
+                params: {
+                    memorizedLogin: formData.memorizedLogin,
+                },
+                method: "get",
+            });
+        } catch (error) {
+            console.log(error);
+        }
+
+        const checkPopup = setInterval(() => {
+            if (popup?.closed) {
+                clearInterval(checkPopup);
+            }
+        }, 2000);
+    };
+    const handleLoginWithFacebook = async () => {
+        const width = 500;
+        const height = 800;
+        const left = screen.width / 2 - width / 2;
+        const top = screen.height / 2 - height / 2;
+
+        // Open facebook login popup
+        const popup = window.open(
+            `${serverBaseUrl}/auth/facebook`,
+            "_blank",
+            `width=${width},height=${height},top=${top},left=${left}`,
+        );
+
+        if (!popup) {
+            console.error("Failed to open pop-up window");
+            return;
+        }
+
+        try {
+            await axiosInstance({
+                url: "/auth/facebook",
+                params: {
+                    memorizedLogin: formData.memorizedLogin,
+                },
+                method: "get",
+            });
+        } catch (error) {
+            console.log(error);
+        }
+
+        const checkPopup = setInterval(() => {
+            if (popup?.closed) {
+                clearInterval(checkPopup);
+            }
+        }, 2000);
     };
 
     useEffect(() => {
@@ -125,7 +197,7 @@ function FormPhoneNumber({ setCurrentComponent, setFormData, formData }) {
 
     return (
         <>
-            <form ref={formRef} onSubmit={handleSubmit} onKeyDown={handleKeyDown}>
+            <form ref={formRef} onSubmit={handleSubmit}>
                 <div className={cx("title")}>
                     <h1>Đăng nhập</h1>
                     <h4>Nhập số điện thoại của bạn</h4>
@@ -203,7 +275,12 @@ function FormPhoneNumber({ setCurrentComponent, setFormData, formData }) {
                     <div className={cx("phone-input-alert")}>{alertMessage}</div>
                 </div>
                 <div className={cx("memorized-login-wrapper")}>
-                    <Checkbox name="memorizedLogin" size="medium" style={{ color: "var(--primaryColor)" }} />
+                    <Checkbox
+                        name="memorizedLogin"
+                        onChange={handleMemorizedLoginChange}
+                        size="medium"
+                        style={{ color: "var(--primaryColor)" }}
+                    />
                     <span className={cx("checkbox-label")}>Ghi nhớ đăng nhập trên thiết bị này.</span>
                 </div>
                 <button
@@ -218,14 +295,14 @@ function FormPhoneNumber({ setCurrentComponent, setFormData, formData }) {
                 hoặc
             </Divider>
             <div className={cx("social-login-buttons-group")}>
-                <button type="button" onClick={() => {}} className={cx("google-login-btn")}>
+                <button type="button" onClick={handleLoginWithGoogle} className={cx("google-login-btn")}>
                     <div
                         className={cx("logo")}
                         style={{ backgroundImage: `url(${require("@images/logos/google-logo.webp")})` }}
                     ></div>
                     <span>Tiếp tục với Google</span>
                 </button>
-                <button type="button" className={cx("facebook-login-btn")}>
+                <button type="button" onClick={handleLoginWithFacebook} className={cx("facebook-login-btn")}>
                     <div
                         className={cx("logo")}
                         style={{ backgroundImage: `url(${require("@images/logos/facebook-logo.webp")})` }}

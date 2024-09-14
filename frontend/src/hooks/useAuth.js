@@ -1,6 +1,6 @@
 import { useSelector, useDispatch } from "react-redux";
 
-import { login, logout } from "@features/auth/authSlice";
+import { clearCookie, login, logout } from "@features/auth/authSlice";
 const useAuth = () => {
     const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
     const dispatch = useDispatch();
@@ -13,10 +13,15 @@ const useAuth = () => {
         dispatch(logout());
     };
 
+    const handleClearCookie = () => {
+        dispatch(clearCookie());
+    };
+
     return {
         isAuthenticated,
         login: handleLogin,
         logout: handleLogout,
+        clearCookie: handleClearCookie,
     };
 };
 
