@@ -1,5 +1,4 @@
 const { DataTypes } = require("sequelize");
-
 const { sequelize } = require("@config/sequelize");
 
 const orderModel = sequelize.define(
@@ -9,23 +8,15 @@ const orderModel = sequelize.define(
             type: DataTypes.STRING(255),
             primaryKey: true,
         },
-        user_id: {
+        account_id: {
             type: DataTypes.STRING(255),
             allowNull: false,
             references: {
-                model: "Users",
-                key: "user_id",
+                model: "Accounts",
+                key: "account_id",
             },
         },
-        restaurant_id: {
-            type: DataTypes.STRING(255),
-            allowNull: false,
-            references: {
-                model: "Restaurants",
-                key: "restaurant_id",
-            },
-        },
-        food_quantity: {
+        quantity: {
             type: DataTypes.INTEGER,
             allowNull: false,
         },
@@ -44,11 +35,15 @@ const orderModel = sequelize.define(
                 isIn: [["Pending", "In Progress", "Completed", "Cancelled"]],
             },
         },
+        order_date: {
+            type: DataTypes.DATE,
+            defaultValue: DataTypes.NOW,
+        },
     },
     {
         tableName: "Orders",
-        timestamps: true,
-        underscored: true,
+        timestamps: false,
+        underscored: false,
     },
 );
 

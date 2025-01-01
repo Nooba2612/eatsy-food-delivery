@@ -1,23 +1,23 @@
 const { DataTypes } = require("sequelize");
-
 const { sequelize } = require("@config/sequelize");
 
 const dishModel = sequelize.define(
-    "Dishes",
+    "Dish",
     {
         dish_id: {
             type: DataTypes.STRING(255),
             primaryKey: true,
         },
-        restaurant_id: {
+        category_id: {
             type: DataTypes.STRING(255),
-            allowNull: false,
+            allowNull: true,
             references: {
-                model: "Restaurants",
-                key: "restaurant_id",
+                model: "Categories",
+                key: "category_id",
             },
+            onDelete: "CASCADE",
         },
-        thumbnail: {
+        thumbnail_path: {
             type: DataTypes.STRING(1000),
             allowNull: false,
         },
@@ -31,17 +31,51 @@ const dishModel = sequelize.define(
         },
         price: {
             type: DataTypes.DECIMAL(10, 2),
-            allowNull: true,
+            allowNull: false,
         },
         available: {
             type: DataTypes.BOOLEAN,
             defaultValue: true,
         },
+        points: {
+            type: DataTypes.DECIMAL(2, 1),
+            allowNull: false,
+            defaultValue: 0,
+            validate: {
+                min: 0,
+                max: 5,
+            },
+        },
+        rate_quantity: {
+            type: DataTypes.INTEGER,
+            allowNull: false,
+            defaultValue: 0,
+            validate: {
+                min: 0,
+            },
+        },
+        discount_amount: {
+            type: DataTypes.DECIMAL(5, 2),
+            allowNull: false,
+            defaultValue: 0,
+            validate: {
+                min: 0,
+            },
+        },
+        created_at: {
+            type: DataTypes.DATE,
+            defaultValue: DataTypes.NOW,
+        },
+        update_at: {
+            type: DataTypes.DATE,
+            defaultValue: DataTypes.NOW,
+            onUpdate: DataTypes.NOW,
+        },
     },
     {
         tableName: "Dishes",
-        timestamps: true,
-        underscored: true,
+        timestamps: false,
+        underscored: false,
     },
 );
 

@@ -15,7 +15,6 @@ CREATE TABLE Users (
     password CHAR(255) NOT NULL,
     address CHAR(255),
     gender ENUM('Male', 'Female', 'Other'),
-    payment_method ENUM('Credit Card', 'Momo', 'Zalo Pay', 'Bank Transfer', 'Cash') DEFAULT 'Cash',
     date_of_birth DATE
 );
 
@@ -25,11 +24,13 @@ CREATE TABLE Accounts (
     user_id CHAR(255),
 	password CHAR(255) NOT NULL,
 	username CHAR(255),
+    type_login CHAR(255) NOT NULL,
 	email CHAR(255) UNIQUE,
 	phone_number CHAR(20) UNIQUE NOT NULL,
 	country_code CHAR(10) NOT NULL,
 	role ENUM('admin', 'customer', 'owner', 'employee') DEFAULT 'customer',
-    avatar CHAR(255),
+    avatar_path CHAR(255),
+    payment_method ENUM('Credit Card', 'Momo', 'Zalo Pay', 'Bank Transfer', 'Cash') DEFAULT 'Cash',
 	created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
 	updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
 	last_login DATETIME NULL,

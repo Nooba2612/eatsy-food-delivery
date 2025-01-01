@@ -1,20 +1,21 @@
 const { DataTypes } = require("sequelize");
 const { sequelize } = require("@config/sequelize");
 
-const reviewModel = sequelize.define(
-    "Review",
+const invoiceItemModel = sequelize.define(
+    "InvoiceItem",
     {
-        review_id: {
+        invoice_item_id: {
             type: DataTypes.STRING(255),
             primaryKey: true,
         },
-        account_id: {
+        invoice_id: {
             type: DataTypes.STRING(255),
             allowNull: false,
             references: {
-                model: "Accounts",
-                key: "account_id",
+                model: "Invoices",
+                key: "invoice_id",
             },
+            onDelete: "CASCADE",
         },
         dish_id: {
             type: DataTypes.STRING(255),
@@ -23,34 +24,26 @@ const reviewModel = sequelize.define(
                 model: "Dishes",
                 key: "dish_id",
             },
+            onDelete: "CASCADE",
         },
-        points: {
-            type: DataTypes.DECIMAL(2, 1),
+        quantity: {
+            type: DataTypes.INTEGER,
             allowNull: false,
+            defaultValue: 1,
             validate: {
-                min: 0,
-                max: 5,
+                min: 1,
             },
         },
-        content: {
-            type: DataTypes.TEXT,
+        price: {
+            type: DataTypes.DECIMAL(10, 2),
             allowNull: false,
-        },
-        created_at: {
-            type: DataTypes.DATE,
-            defaultValue: DataTypes.NOW,
-        },
-        updated_at: {
-            type: DataTypes.DATE,
-            defaultValue: DataTypes.NOW,
-            onUpdate: DataTypes.NOW,
         },
     },
     {
-        tableName: "Reviews",
+        tableName: "InvoiceItems",
         timestamps: false,
         underscored: false,
     },
 );
 
-module.exports = reviewModel;
+module.exports = invoiceItemModel;
