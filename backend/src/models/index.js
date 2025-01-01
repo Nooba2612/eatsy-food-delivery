@@ -1,14 +1,18 @@
 const { sequelize } = require("@config/sequelize");
 
 const userModel = require("@models/userModel");
-const conversationModal = require("@models/conversationModel");
+const accountModel = require("@models/accountModel");
 const dishModel = require("@models/dishModel");
-const deliveryPersonelModal = require("@models/deliveryPersonnelModel");
-const orderItemModal = require("@models/orderItemModel");
-const deliveryAssignmentModel = require("@models/deliveryAssignmentModel");
+const orderItemModel = require("@models/orderItemModel");
+const cartItemModel = require("@models/cartItemModel");
 const orderModel = require("@models/orderModel");
+const cartModel = require("@models/cartModel");
+const categoryModel = require("@models/categoryModel");
+const customerModel = require("@models/customerModel");
+const invoiceItemModel = require("@models/invoiceItemModel");
+const invoiceModel = require("@models/invoiceModel");
+const voucherModel = require("@models/voucherModel");
 const otpModel = require("@models/otpModel");
-const restaurantModel = require("@models/restaurantModel");
 const reviewModel = require("@models/reviewModel");
 
 sequelize
@@ -20,13 +24,17 @@ sequelize
 
 module.exports = {
     userModel,
-    conversationModal,
-    deliveryPersonelModal,
-    orderItemModal,
-    deliveryAssignmentModel,
+    cartItemModel,
+    accountModel,
+    orderItemModel,
     orderModel,
     otpModel,
-    restaurantModel,
     reviewModel,
     dishModel,
+    cartModel,
+    categoryModel,
+    customerModel,
+    invoiceItemModel,
+    invoiceModel,
+    voucherModel,
 };

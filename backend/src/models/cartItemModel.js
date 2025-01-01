@@ -1,20 +1,12 @@
 const { DataTypes } = require("sequelize");
 const { sequelize } = require("@config/sequelize");
 
-const reviewModel = sequelize.define(
-    "Review",
+const cartItemModel = sequelize.define(
+    "CartItem",
     {
-        review_id: {
+        cart_item_id: {
             type: DataTypes.STRING(255),
             primaryKey: true,
-        },
-        account_id: {
-            type: DataTypes.STRING(255),
-            allowNull: false,
-            references: {
-                model: "Accounts",
-                key: "account_id",
-            },
         },
         dish_id: {
             type: DataTypes.STRING(255),
@@ -23,18 +15,23 @@ const reviewModel = sequelize.define(
                 model: "Dishes",
                 key: "dish_id",
             },
+            onDelete: "CASCADE",
         },
-        points: {
-            type: DataTypes.DECIMAL(2, 1),
+        cart_id: {
+            type: DataTypes.STRING(255),
+            allowNull: false,
+            references: {
+                model: "Carts",
+                key: "cart_id",
+            },
+            onDelete: "CASCADE",
+        },
+        quantity: {
+            type: DataTypes.INTEGER,
             allowNull: false,
             validate: {
                 min: 0,
-                max: 5,
             },
-        },
-        content: {
-            type: DataTypes.TEXT,
-            allowNull: false,
         },
         created_at: {
             type: DataTypes.DATE,
@@ -47,10 +44,10 @@ const reviewModel = sequelize.define(
         },
     },
     {
-        tableName: "Reviews",
+        tableName: "CartItems",
         timestamps: false,
         underscored: false,
     },
 );
 
-module.exports = reviewModel;
+module.exports = cartItemModel;
