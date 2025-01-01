@@ -28,6 +28,7 @@ module.exports = [
             "no-undef": "error",
             "react/jsx-uses-react": "error",
             "react/jsx-uses-vars": "error",
+            "react/jsx-no-undef": "error",
             "no-useless-escape": "off",
             "no-inline-comments": "off",
             "no-unused-expressions": "error",
