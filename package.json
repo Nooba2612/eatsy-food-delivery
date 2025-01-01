@@ -15,6 +15,7 @@
         "concurrently": "^8.2.2"
     },
     "dependencies": {
+        "eatsy_food_delivery": "file:",
         "y18n": "^5.0.8"
     }
 }

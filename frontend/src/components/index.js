@@ -8,6 +8,9 @@ import FormOTP from "./FormLogin/FormOTP/FormOTP";
 import FormPassword from "./FormLogin/FormPassword/FormPassword";
 import FormUserName from "./FormLogin/FormUserName/FormUserName";
 import LoginStatus from "./FormLogin/LoginStatus/LoginStatus";
+import BestSeller from "./BestSeller/BestSeller";
+import Carousel from "./Carousel/Carousel";
+
 export {
     Authentication,
     Body,
@@ -19,4 +22,6 @@ export {
     FormPassword,
     FormUserName,
     LoginStatus,
+    BestSeller,
+    Carousel,
 };

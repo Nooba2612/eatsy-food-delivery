@@ -8,7 +8,11 @@ const compression = require("compression");
 const session = require("express-session");
 const helmet = require("helmet");
 const passport = require("passport");
-const { usePassportLocalStrategy, usePassportGoogleStrategy, usePassportFacebookStrategy } = require("@config/passport");
+const {
+    usePassportLocalStrategy,
+    usePassportGoogleStrategy,
+    usePassportFacebookStrategy,
+} = require("@config/passport");
 
 const useMiddlewares = (app) => {
     app.use(express.static(path.join(__dirname, "public")));
@@ -45,7 +49,7 @@ const useMiddlewares = (app) => {
     app.use(passport.authenticate("session"));
     usePassportLocalStrategy(passport);
     usePassportGoogleStrategy(passport);
-    usePassportFacebookStrategy(passport)
+    usePassportFacebookStrategy(passport);
 };
 
 module.exports = useMiddlewares;

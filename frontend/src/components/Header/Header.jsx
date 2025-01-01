@@ -15,6 +15,7 @@ function Header() {
     const [backgroundColor, setBackgroundColor] = useState("var(--backgroundColor)");
     const [activeKey, setActiveKey] = useState("1");
     const [darkMode, setDarkmode] = useState(false);
+    const [bannerBackgroundColor, setBannerBackgroundColor] = useState("var(--whiteColor)");
     const { isAuthenticated } = useAuth();
     const user = getUserInfo();
 
@@ -34,8 +35,10 @@ function Header() {
         const handleScroll = () => {
             if (window.scrollY > 50) {
                 setBackgroundColor("var(--whiteColor)"); // Initial color
+                setBannerBackgroundColor("var(--backgroundColor)");
             } else {
                 setBackgroundColor("var(--backgroundColor)"); // Change to your desired color when scrolled
+                setBannerBackgroundColor("var(--whiteColor)");
             }
         };
 
@@ -59,6 +62,9 @@ function Header() {
 
     return (
         <div className={cx("background")} style={{ backgroundColor: backgroundColor }}>
+            <div style={{ backgroundColor: bannerBackgroundColor }} className={cx("banner")}>
+                Giảm giá đến 30% cho mỗi món ăn - Hãy đặt hàng ngay bây giờ
+            </div>
             <Container maxWidth="lg">
                 <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "30px 0" }}>
                     <div className={cx("logo")}>
