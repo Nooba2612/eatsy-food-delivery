@@ -9,7 +9,7 @@ const otpModel = sequelize.define(
             type: DataTypes.STRING(255),
             primaryKey: true,
         },
-        phone: {
+        phone_number: {
             type: DataTypes.STRING(15),
             allowNull: false,
         },
@@ -28,8 +28,8 @@ const otpModel = sequelize.define(
     },
     {
         tableName: "OTP",
-        timestamps: true,
-        underscored: true,
+        timestamps: false,
+        underscored: false,
     },
 );
 

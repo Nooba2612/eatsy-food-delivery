@@ -1,7 +1,6 @@
 const { sequelize } = require("@config/sequelize");
 
 const userModel = require("@models/userModel");
-const accountModel = require("@models/accountModel");
 const dishModel = require("@models/dishModel");
 const orderItemModel = require("@models/orderItemModel");
 const cartItemModel = require("@models/cartItemModel");
@@ -25,7 +24,6 @@ sequelize
 module.exports = {
     userModel,
     cartItemModel,
-    accountModel,
     orderItemModel,
     orderModel,
     otpModel,

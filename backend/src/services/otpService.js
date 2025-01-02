@@ -20,7 +20,7 @@ const saveOTP = async (countryCode, phoneNumber, otp) => {
         await otpModel.create({
             otp_id: otpId,
             country_code: countryCode,
-            phone: phoneNumber,
+            phone_number: phoneNumber,
             otp: otp,
             expires_at: expirationTime,
         });
@@ -32,7 +32,7 @@ const saveOTP = async (countryCode, phoneNumber, otp) => {
 const checkOTP = async (countryCode, phoneNumber, otp) => {
     try {
         const otpEntry = await otpModel.findOne({
-            where: { country_code: countryCode, phone: phoneNumber },
+            where: { country_code: countryCode, phone_number: phoneNumber },
             order: [["expires_at", "DESC"]],
         });
 

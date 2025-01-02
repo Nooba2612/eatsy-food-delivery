@@ -1,8 +1,9 @@
 const { v4: uuidv4 } = require("uuid");
 
 const { createVerification } = require("@config/twilio");
-const { saveOTP, generateOTP, checkOTP, deleteOTP } = require("@helpers/otpHelper");
-const { getUserByPhone, createUser, compareData, hashData, getUserById } = require("@helpers/userHelper");
+const { saveOTP, generateOTP, checkOTP, deleteOTP } = require("@services/otpService");
+const { compareHashedData, hashData } = require("@helpers/validationHelper");
+const { getUserByPhone, createUser, getUserById } = require("@services/userService");
 const { generateJWT } = require("@helpers/jwtHelper");
 
 class authController {
@@ -76,7 +77,7 @@ class authController {
                 return res.status(404).json({ success: false, message: "User not found" });
             }
 
-            const isValidPassword = await compareData(password, user.password);
+            const isValidPassword = await compareHashedData(password, user.password);
 
             if (!isValidPassword) {
                 return res.json({ success: false, message: "Login user failed" });
@@ -106,8 +107,9 @@ class authController {
             }
 
             const hashedPassword = await hashData(password);
+            const typeLogin = "Standard";
 
-            await createUser(username, countryCode, phone, hashedPassword); // add user to DB
+            await createUser(username, typeLogin, countryCode, phone, hashedPassword); // add user to DB
 
             const user = await getUserByPhone(countryCode, phone); // get user from DB
 
@@ -152,6 +154,7 @@ class authController {
             if (!user) {
                 return res.status(401).json({ success: false, message: "Unauthorized" });
             }
+
 
             const jwtExpiresIn =
                 memorizedLogin === "true" ? process.env.JWT_EXPIRES_IN_30D : process.env.JWT_EXPIRES_IN_1H;

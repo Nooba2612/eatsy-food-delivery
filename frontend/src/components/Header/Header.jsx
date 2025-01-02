@@ -2,7 +2,8 @@ import React, { useEffect, useState } from "react";
 import classNames from "classnames/bind";
 import { Link } from "react-router-dom";
 import { DarkMode, Search, Login, ShoppingCart, LightMode } from "@mui/icons-material";
-import { Avatar, Box, Container } from "@mui/material";
+import { Box, Container } from "@mui/material";
+import { Avatar } from "antd";
 
 import styles from "./Header.module.css";
 import useAuth from "@hooks/useAuth";
@@ -123,22 +124,9 @@ function Header() {
                         </button>
                         {isAuthenticated ? (
                             <button className={cx("profile-btn")}>
-                                <Avatar
-                                    sx={{
-                                        fontSize: "var(--fontSizeTiny)",
-                                        backgroundColor:
-                                            backgroundColor === "var(--whiteColor)"
-                                                ? "var(--backgroundColor)"
-                                                : "var(--whiteColor)",
-                                        color: "var(--blackColor)",
-                                        border: "1px solid var(--borderColor)",
-                                        fontWeight: "var(--fontWeightBold)",
-                                        marginBottom: "10px",
-                                        transition: "all 0.2s linear",
-                                    }}
-                                    {...getFirstLetterOfEachWord(user?.name || "")}
-                                    src={user?.avatar || ""}
-                                />
+                                <Avatar src={user?.avatar_path || null} size={40}>
+                                    {getFirstLetterOfEachWord(user?.fullname || user?.username || "").children}
+                                </Avatar>
                             </button>
                         ) : (
                             <button className={cx("login-btn")}>
