@@ -12,31 +12,25 @@ FLUSH PRIVILEGES;
 CREATE TABLE Users (
     user_id CHAR(255) PRIMARY KEY,
     fullname CHAR(255),
-    password CHAR(255) NOT NULL,
     address CHAR(255),
     gender ENUM('Male', 'Female', 'Other'),
-    date_of_birth DATE
-);
-
--- Create Accounts table
-CREATE TABLE Accounts (
-	account_id CHAR(225) PRIMARY KEY,
-    user_id CHAR(255),
-	password CHAR(255) NOT NULL,
+    date_of_birth DATE,
+    password CHAR(255) NOT NULL,
 	username CHAR(255),
-    type_login CHAR(255) NOT NULL,
+    type_login ENUM('Standard', 'Google', 'Facebook', 'Apple') NOT NULL,
 	email CHAR(255) UNIQUE,
 	phone_number CHAR(20) UNIQUE NOT NULL,
 	country_code CHAR(10) NOT NULL,
-	role ENUM('admin', 'customer', 'owner', 'employee') DEFAULT 'customer',
-    avatar_path CHAR(255),
+	role ENUM('Admin', 'Customer', 'Owner', 'Employee') DEFAULT 'Customer',
+    avatar_path VARCHAR(1000),
     payment_method ENUM('Credit Card', 'Momo', 'Zalo Pay', 'Bank Transfer', 'Cash') DEFAULT 'Cash',
 	created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
 	updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
 	last_login DATETIME NULL,
-	is_online BOOLEAN DEFAULT TRUE,
-    FOREIGN KEY (user_id) REFERENCES Users(user_id) ON DELETE CASCADE
+	is_online BOOLEAN DEFAULT TRUE
 );
+
+select * from users;
 
 -- Create Customer table
 CREATE TABLE Customers (
@@ -85,21 +79,21 @@ CREATE TABLE OTP (
 -- Create Reviews table
 CREATE TABLE Reviews (
     review_id CHAR(255) PRIMARY KEY,
-    account_id CHAR(255),
+    user_id CHAR(255),
     dish_id CHAR(255),
     points DECIMAL(2, 1) NOT NULL CHECK (points >= 0 AND points <=5),
     content TEXT NOT NULL,
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP, 
     updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    FOREIGN KEY (account_id) REFERENCES Accounts(account_id),
+    FOREIGN KEY (user_id) REFERENCES Users(user_id),
     FOREIGN KEY (dish_id) REFERENCES Dishes(dish_id)
 );
 
 -- Create Carts table
 CREATE TABLE Carts (
 	cart_id CHAR(255) PRIMARY KEY,
-    account_id CHAR(255) UNIQUE,
-    FOREIGN KEY (account_id) REFERENCES Accounts(account_id)
+    user_id CHAR(255) UNIQUE,
+    FOREIGN KEY (user_id) REFERENCES Users(user_id)
 ); 
 
 -- Create Cart Items table
@@ -117,13 +111,13 @@ CREATE TABLE CartItems (
 -- Create Orders table
 CREATE TABLE Orders (
     order_id CHAR(255) PRIMARY KEY,
-	account_id CHAR(255),
+	user_id CHAR(255),
 	quantity INT NOT NULL,
 	foods TEXT NOT NULL,
 	order_note TEXT,
     order_status CHAR(20) NOT NULL CHECK (order_status IN ('Pending', 'In Progress', 'Completed', 'Cancelled')),
     order_date DATETIME DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (account_id) REFERENCES Accounts(account_id)
+    FOREIGN KEY (user_id) REFERENCES Users(user_id)
 );
 
 -- Create Order Items table
@@ -151,7 +145,7 @@ CREATE TABLE Invoices (
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP, 
     FOREIGN KEY (customer_id) REFERENCES Customers(customer_id) ON DELETE CASCADE,
-    FOREIGN KEY (employee_id) REFERENCES Accounts(user_id) ON DELETE CASCADE
+    FOREIGN KEY (employee_id) REFERENCES Users(user_id) ON DELETE CASCADE
 );
 
 -- Create Invoice Items table
@@ -182,7 +176,9 @@ CREATE TABLE Vouchers (
 -- ------------------------ TRIGGERS -------------------------------
 -- ! Run this in Admin(root) to turn on privilege
 SET GLOBAL log_bin_trust_function_creators = 1;
+
 DELIMITER $$
+
 -- Auto generate Categories Id
 CREATE TRIGGER insert_categories_id_trigger
 BEFORE INSERT ON Categories
@@ -191,16 +187,6 @@ BEGIN
     IF NEW.category_id IS NULL OR NEW.category_id = ''
     THEN
         SET NEW.category_id = UUID();
-    END IF;
-END$$
-
--- Auto generate Accounts Id
-CREATE TRIGGER insert_accounts_id_trigger
-BEFORE INSERT ON Accounts
-FOR EACH ROW
-BEGIN
-    IF NEW.account_id IS NULL THEN
-        SET NEW.account_id = UUID();
     END IF;
 END$$
 
@@ -415,3 +401,4 @@ VALUES
 (@CombosCategoryId, '/images/dishes/combos/m_n_ngon_ph_i_th_-_3.png', 'Combo Cả Nhà No Nê', '3 Mì Ý gà rán + 3 Nước ngọt + 2 Miếng gà rán + 1 Khoai tây chiên', 185000),
 (@CombosCategoryId, '/images/dishes/combos/m_n_ngon_ph_i_th_-_4_2.png.png', 'Combo Bạn Bè Tụ Tập', '2 Mì Ý gà rán + 2 Cơm gà rán + 4 Nước ngọt + 2 Bánh xoài + 2 Khoai tây chiên', 322000),
 (@CombosCategoryId, '/images/dishes/combos/m_n_ngon_ph_i_th_-_7.png', 'Tiệc Kiểu Mới, Quà Chuẩn Gu', '4 Mì Ý gà rán + 4 Gà rán + 5 Nước ngọt + 4 Khoai tây chiên', 699000);
+

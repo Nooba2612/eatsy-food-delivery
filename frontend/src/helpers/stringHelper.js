@@ -24,7 +24,7 @@ const getFirstLetterOfEachWord = (str) => {
                       index === 0 || index === wordQuantity - 2 || index === wordQuantity - 1 ? word[0] : "",
                   )
                   .reduce((acc, cur) => acc + cur);
-
+    
     return { children: result };
 };
 

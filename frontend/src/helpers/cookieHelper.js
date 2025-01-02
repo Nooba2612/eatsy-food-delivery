@@ -15,6 +15,7 @@ const getUserInfo = () => {
 
     if (token) {
         const user = jwtDecode(token);
+        console.log(user)
         return user;
     } else {
         return null;

@@ -2,7 +2,7 @@ const LocalStrategy = require("passport-local").Strategy;
 const GoogleStrategy = require("passport-google-oauth20").Strategy;
 const FacebookStrategy = require("passport-facebook").Strategy;
 
-const { getUser, compareData, hashData } = require("@helpers/userHelper");
+const { getUser, compareData, hashData } = require("@helpers/validationHelper");
 const { userModel } = require("@models/index");
 
 const usePassportLocalStrategy = (passport) => {
@@ -78,10 +78,14 @@ const usePassportGoogleStrategy = (passport) => {
                         where: { user_id: sub },
                         defaults: {
                             user_id: sub,
-                            name,
+                            fullname: name,
+                            username: name,
                             email: hashedEmail,
-                            avatar: picture,
-                            type_login: "google",
+                            avatar_path: picture,
+                            type_login: "Google",
+                            password: "*",
+                            country_code: "*",
+                            phone_number: "*",
                         },
                     });
 
@@ -126,7 +130,6 @@ const usePassportFacebookStrategy = (passport) => {
             async (req, accessToken, refreshToken, profile, cb) => {
                 try {
                     console.log("\n\nProfile: ", profile._json);
-
                     const { id, name, picture, email } = profile._json;
 
                     const hashedEmail = await hashData(email);
@@ -136,10 +139,14 @@ const usePassportFacebookStrategy = (passport) => {
                         where: { user_id: id },
                         defaults: {
                             user_id: id,
-                            name,
+                            fullname: name,
+                            username: name,
                             email: hashedEmail,
-                            avatar: picture.data.url,
-                            type_login: "facebook",
+                            avatar_path: picture.data.url,
+                            type_login: "Facebook",
+                            password: "*",
+                            country_code: "*",
+                            phone_number: "*",
                         },
                     });
 
