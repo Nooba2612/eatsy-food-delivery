@@ -13,15 +13,23 @@ import {
     Menu,
     Order,
     Profile,
-    RestaurantList,
     Search,
-    Merchant,
-    MerchantManage,
     Contact,
     Offers,
+    ForgotPassword,
 } from "@pages/index";
-import { Authentication, LoginStatus } from "@components/index";
+import {
+    Authentication,
+    FormForgotPasswordOTP,
+    FormResetPassword,
+    FormPassword,
+    FormPhoneNumber,
+    FormUserName,
+    LoginStatus,
+} from "@components/index";
 import DefaultLayout from "@layouts/DefaultLayout";
+import FormForgetPasswordInfo from "@components/FormForgotPassword/FormForgotPasswordInfo/FormForgotPasswordInfo";
+import FormLoginOTP from "@components/FormLogin/FormLoginOTP/FormLoginOTP";
 
 const publicRoutes = [
     {
@@ -43,10 +51,6 @@ const publicRoutes = [
                 element: <Search />,
             },
             {
-                path: "/restaurants",
-                element: <RestaurantList />,
-            },
-            {
                 path: "/menu",
                 element: <Menu />,
             },
@@ -63,10 +67,46 @@ const publicRoutes = [
     {
         path: "/login",
         element: <Login />,
+        children: [
+            {
+                path: "",
+                element: <FormPhoneNumber />,
+            },
+            {
+                path: "input-username",
+                element: <FormUserName />,
+            },
+            {
+                path: "verify-otp",
+                element: <FormLoginOTP />,
+            },
+            {
+                path: "input-password",
+                element: <FormPassword />,
+            },
+            {
+                path: "status",
+                element: <LoginStatus />,
+            },
+        ],
     },
     {
-        path: "/login/status",
-        element: <LoginStatus />,
+        path: "/forgot-password",
+        element: <ForgotPassword />,
+        children: [
+            {
+                path: "",
+                element: <FormForgetPasswordInfo />,
+            },
+            {
+                path: "verify-otp",
+                element: <FormForgotPasswordOTP />,
+            },
+            {
+                path: "reset-password",
+                element: <FormResetPassword />,
+            },
+        ],
     },
 ];
 
@@ -90,14 +130,6 @@ const privateRoutes = [
             {
                 path: "/checkout",
                 element: <Checkout />,
-            },
-            {
-                path: "/merchant",
-                element: <Merchant />,
-            },
-            {
-                path: "/merchant/manage",
-                element: <MerchantManage />,
             },
             {
                 path: "/profile",

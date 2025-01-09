@@ -1,3 +1,4 @@
+const { Op } = require("sequelize");
 const dishModel = require("@models/dishModel");
 
 const getAllDish = async () => {
@@ -9,7 +10,6 @@ const getAllDish = async () => {
     }
 };
 
-const { Op } = require("sequelize");
 
 const findDishesByName = async (name) => {
     try {

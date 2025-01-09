@@ -1,9 +1,9 @@
-import React, { memo, useRef, useState } from "react";
+import React, { memo, useEffect, useRef, useState } from "react";
 import PropTypes from "prop-types";
 import classNames from "classnames/bind";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { Box } from "@mui/material";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useOutletContext } from "react-router-dom";
 
 import styles from "@pages/Login/Login.module.css";
 import { hasLowercase, hasNumber, hasUppercase } from "@helpers/stringHelper";
@@ -13,15 +13,22 @@ import axiosInstance from "@config/axiosInstance";
 
 const cx = classNames.bind(styles);
 
-function FormPassword({ setFormData, formData, isExistUser }) {
+function FormPassword() {
+    const navigate = useNavigate();
+    const { setFormData, formData, isExistUser } = useOutletContext();
     const [isShowPassword, setIsShowPassword] = useState(false);
     const [isValidPassword, setIsValidPassword] = useState(false);
     const [passwordAlertMessage, setPasswordAlertMessage] = useState("");
     const [password, setPassword] = useState();
     const { setLoading } = useLoading();
     const formRef = useRef();
-    const navigate = useNavigate();
     const { login } = useAuth();
+
+    useEffect(() => {
+        if (!formData.phone) {
+            navigate("/login");
+        }
+    }, []);
 
     const handleSubmit = async (e) => {
         e.preventDefault();

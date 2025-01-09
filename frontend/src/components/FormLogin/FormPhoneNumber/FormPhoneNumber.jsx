@@ -10,10 +10,12 @@ import useLoading from "@hooks/useLoading";
 import { regexNumbers, regexVietnamPhoneNumber } from "@constants/constants";
 import { FormOTP } from "@components/index";
 import axiosInstance from "@config/axiosInstance";
+import { Link, useNavigate, useOutletContext } from "react-router-dom";
 
 const cx = classNames.bind(styles);
 
-function FormPhoneNumber({ setCurrentComponent, setFormData, formData }) {
+function FormPhoneNumber() {
+    const { setFormData, formData } = useOutletContext();
     const [countries, setCountries] = useState([]);
     const [currentCountry, setCurrentCountry] = useState({
         name: "Việt Nam",
@@ -34,6 +36,7 @@ function FormPhoneNumber({ setCurrentComponent, setFormData, formData }) {
     const serverBaseUrl = process.env.REACT_APP_SERVER_BASE_URL;
     const clientBaseUrl = process.env.REACT_APP_CLIENT_BASE_URL;
     const { setLoading } = useLoading();
+    const navigate = useNavigate();
 
     const handleCountryChange = (e) => {
         countries.forEach((country) => {
@@ -95,7 +98,7 @@ function FormPhoneNumber({ setCurrentComponent, setFormData, formData }) {
             });
 
             if (res.data.success) {
-                setCurrentComponent(FormOTP);
+                navigate("/login/verify-otp");
             }
         } catch (err) {
             console.log(err);
@@ -320,11 +323,5 @@ function FormPhoneNumber({ setCurrentComponent, setFormData, formData }) {
         </>
     );
 }
-
-FormPhoneNumber.propTypes = {
-    setCurrentComponent: PropTypes.func,
-    setFormData: PropTypes.func,
-    formData: PropTypes.object,
-};
 
 export default memo(FormPhoneNumber);

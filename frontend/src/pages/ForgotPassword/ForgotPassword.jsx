@@ -1,40 +1,23 @@
 import React, { useEffect, useState } from "react";
 import classNames from "classnames/bind";
 import { Link, Outlet, useNavigate } from "react-router-dom";
-import { CopyrightRounded } from "@mui/icons-material";
+import { ArrowBack, CopyrightRounded } from "@mui/icons-material";
 import { Container } from "@mui/material";
 
-import styles from "./Login.module.css";
+import styles from "./ForgotPassword.module.css";
 import axiosInstance from "@config/axiosInstance";
 import useAuth from "@hooks/useAuth";
 import { getCookie } from "@helpers/cookieHelper";
+import { Divider } from "antd";
+import { regexEmail, regexVietnamPhoneNumber } from "@constants/constants";
+import useLoading from "@hooks/useLoading";
 
 const cx = classNames.bind(styles);
 
-function Login() {
-    const [formData, setFormData] = useState({ memorizedLogin: false });
-    const [isExistUser, setIsExistUser] = useState(true);
+function ForgotPassword() {
     const navigate = useNavigate();
-    const { isAuthenticated, login, logout } = useAuth();
-
-    useEffect(() => {
-        const loginChannel = new BroadcastChannel("login_channel");
-
-        loginChannel.addEventListener("message", (e) => {
-            if (e.data.success) {
-                login();
-                navigate("/");
-            } else {
-                navigate("/login");
-                logout();
-            }
-            window.location.reload();
-        });
-
-        return () => {
-            loginChannel.close();
-        };
-    }, []);
+    const { isAuthenticated } = useAuth();
+    const [info, setInfo] = useState();
 
     useEffect(() => {
         const authenticate = async () => {
@@ -64,14 +47,24 @@ function Login() {
                 <Container maxWidth="lg">
                     <div className={cx("logo")}>
                         <Link to={"/"}>Eatsy</Link>
+                        <span>
+                            <Divider
+                                style={{
+                                    borderColor: "var(--blackColor)",
+                                    borderWidth: "3px",
+                                    height: "40px",
+                                    marginLeft: "12px",
+                                }}
+                                type="vertical"
+                            />
+                            <span style={{ fontSize: "var(--fontSizeLarge)" }}>Đặt lại mật khẩu</span>
+                        </span>
                     </div>
                 </Container>
             </header>
             <div className={cx("content")}>
-                <Container maxWidth="xs">
-                    <div className="login-form">
-                        <Outlet context={{ setFormData, formData, isExistUser, setIsExistUser }} />
-                    </div>
+                <Container maxWidth="sm">
+                    <Outlet context={{ info, setInfo }} />
                 </Container>
             </div>
             <footer>
@@ -81,4 +74,4 @@ function Login() {
     );
 }
 
-export default Login;
+export default ForgotPassword;

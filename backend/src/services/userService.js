@@ -1,6 +1,6 @@
 const userModel = require("@models/userModel");
 
-const getUserByPhone = async (countryCode, phoneNumber) => {
+const getUserByPhoneNumber = async (countryCode, phoneNumber) => {
     try {
         const user = await userModel.findOne({ where: { country_code: countryCode, phone_number: phoneNumber } });
         if (user) {
@@ -8,6 +8,21 @@ const getUserByPhone = async (countryCode, phoneNumber) => {
             return user;
         } else {
             console.log("No user found with that phone number");
+            return;
+        }
+    } catch (error) {
+        console.log(error);
+    }
+};
+
+const getUserByEmail = async (email) => {
+    try {
+        const user = await userModel.findOne({ where: { email: email } });
+        if (user) {
+            console.log("User found:", user?.dataValues);
+            return user;
+        } else {
+            console.log("No user found with that email");
             return;
         }
     } catch (error) {
@@ -37,7 +52,7 @@ const createUser = async (username, type_login, country_code, phone_number, pass
             type_login,
             phone_number,
             country_code,
-            password
+            password,
         });
         console.log("User created:", newUser);
         return newUser;
@@ -46,8 +61,29 @@ const createUser = async (username, type_login, country_code, phone_number, pass
     }
 };
 
+const changePassword = async (userId, newPasswordHashed) => {
+    try {
+        const result = await userModel.update(
+            {
+                password: newPasswordHashed,
+            },
+            {
+                where: {
+                    user_id: userId,
+                },
+            },
+        );
+
+        console.log("Update password:", result);
+    } catch (error) {
+        console.log("Change password failed:", error);
+    }
+};
+
 module.exports = {
-    getUserByPhone,
+    getUserByPhoneNumber,
     getUserById,
     createUser,
+    getUserByEmail,
+    changePassword,
 };

@@ -15,6 +15,7 @@
                     "@helpers": "./src/helpers",
                     "@views": "./src/views",
                     "@images": "./src/public/images",
+                    "@constants": "./src/constants",
                     "@javascripts": "./src/public/javascripts",
                     "@stylesheets": "./src/public/stylesheets"
                 },

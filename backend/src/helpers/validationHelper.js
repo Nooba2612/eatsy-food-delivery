@@ -18,7 +18,6 @@ const compareHashedData = async (data, hashedData) => {
     return await bcrypt.compareSync(data, hashedData);
 };
 
-
 module.exports = {
     hashData,
     compareHashedData,

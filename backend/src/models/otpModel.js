@@ -9,8 +9,8 @@ const otpModel = sequelize.define(
             type: DataTypes.STRING(255),
             primaryKey: true,
         },
-        phone_number: {
-            type: DataTypes.STRING(15),
+        info: {
+            type: DataTypes.STRING(255),
             allowNull: false,
         },
         otp: {
@@ -19,7 +19,7 @@ const otpModel = sequelize.define(
         },
         country_code: {
             type: DataTypes.STRING(10),
-            allowNull: false,
+            allowNull: true,
         },
         expires_at: {
             type: DataTypes.DATE,

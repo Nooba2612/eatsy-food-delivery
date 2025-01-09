@@ -9,12 +9,10 @@ import Login from "./Login/Login";
 import Menu from "./Menu/Menu";
 import Order from "./Orders/Orders";
 import Profile from "./Profile/Profile";
-import RestaurantList from "./RestaurantList/RestaurantList";
 import Search from "./Search/Search";
-import Merchant from "./Merchant/Merchant";
-import MerchantManage from "./MerchantManage/MerchantManage";
 import Contact from "./Contact/Contact";
 import Offers from "./Offers/Offers";
+import ForgotPassword from "./ForgotPassword/ForgotPassword";
 
 export {
     Home,
@@ -28,10 +26,8 @@ export {
     Menu,
     Order,
     Profile,
-    RestaurantList,
     Search,
-    Merchant,
-    MerchantManage,
     Contact,
     Offers,
+    ForgotPassword,
 };
