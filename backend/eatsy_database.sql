@@ -69,8 +69,8 @@ CREATE TABLE Dishes (
 -- Create OTP table
 CREATE TABLE OTP (
     otp_id CHAR(255) PRIMARY KEY, 
-    phone_number VARCHAR(15) NOT NULL,
-    country_code CHAR(10) NOT NULL,
+    info VARCHAR(255) NOT NULL,
+    country_code CHAR(10),
     otp VARCHAR(6) NOT NULL, 
     expires_at TIMESTAMP NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP

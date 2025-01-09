@@ -5,22 +5,23 @@ import { Box, styled } from "@mui/system";
 import classNames from "classnames/bind";
 
 import useLoading from "@hooks/useLoading";
-import { regexNumbers } from "@constants/constants";
+import { regexEmail, regexNumbers } from "@constants/constants";
 import styles from "@pages/Login/Login.module.css";
-import { FormPassword, FormUserName } from "@components/index";
 import axiosInstance from "@config/axiosInstance";
+import { useNavigate, useOutletContext } from "react-router-dom";
 
 const cx = classNames.bind(styles);
 
-function OTP({ separator, length, value, onChange, setCurrentComponent, formData, setFormData, setIsExistUser }) {
+function OTP({ separator, length, value, onChange, info }) {
     const inputRefs = useRef(new Array(length).fill(null));
     const [isValidOTP, setIsValidOTP] = useState(true);
     const { setLoading } = useLoading();
+    const navigate = useNavigate();
     const handleSubmit = async (data) => {
         setLoading(true);
         try {
             const res = await axiosInstance({
-                url: "/auth/verify-otp",
+                url: "/auth/forgot-password/verify-otp",
                 method: "post",
                 data: data,
             });
@@ -28,14 +29,7 @@ function OTP({ separator, length, value, onChange, setCurrentComponent, formData
             if (res.data.success) {
                 setIsValidOTP(true);
                 setLoading(false);
-
-                if (res.data.existUser) {
-                    setIsExistUser(true);
-                    setCurrentComponent(FormPassword);
-                } else {
-                    setIsExistUser(false);
-                    setCurrentComponent(FormUserName);
-                }
+                navigate("/forgot-password/reset-password");
             }
         } catch (error) {
             setIsValidOTP(false);
@@ -136,10 +130,7 @@ function OTP({ separator, length, value, onChange, setCurrentComponent, formData
         }
 
         if (currentIndex + 1 === length) {
-            setFormData((prev) => {
-                return { ...prev, otp: value };
-            });
-            handleSubmit({ ...formData, otp: otpArray.join("") });
+            handleSubmit({ info, otp: otpArray.join("") });
         }
     };
 
@@ -175,10 +166,7 @@ function OTP({ separator, length, value, onChange, setCurrentComponent, formData
             onChange(otpArray.join(""));
 
             if (otpArray.join("").length === length) {
-                setFormData((prev) => {
-                    return { ...prev, otp: value };
-                });
-                handleSubmit({ ...formData, otp: otpArray.join("") });
+                handleSubmit({ info, otp: otpArray.join("") });
             }
         }
     };
@@ -218,18 +206,15 @@ OTP.propTypes = {
     length: PropTypes.number.isRequired,
     onChange: PropTypes.func.isRequired,
     separator: PropTypes.node,
-    value: PropTypes.string.isRequired,
-    setCurrentComponent: PropTypes.func,
-    setIsExistUser: PropTypes.func,
-    formData: PropTypes.object,
-    setFormData: PropTypes.func,
 };
 
-function FormOTP({ setCurrentComponent, formData, setFormData, setIsExistUser }) {
+const FormForgotPasswordOTP = () => {
+    const navigate = useNavigate();
     const [otp, setOtp] = useState("");
     const [disabledBtn, setDisabledBtn] = useState(true);
     const resendOTPBtn = useRef();
     const { setLoading } = useLoading();
+    const { info } = useOutletContext();
 
     const countdownTimetoResend = () => {
         let currentSecond = 29;
@@ -253,10 +238,11 @@ function FormOTP({ setCurrentComponent, formData, setFormData, setIsExistUser })
         setLoading(true);
         try {
             const res = await axiosInstance({
-                url: "/auth/send-otp",
+                url: "/auth/forgot-password/send-otp",
                 method: "post",
                 data: {
-                    ...formData,
+                    info,
+                    countryCode: "+84", // set default country code
                     resendOTP: true,
                 },
             });
@@ -287,6 +273,10 @@ function FormOTP({ setCurrentComponent, formData, setFormData, setIsExistUser })
                 clearInterval(countdown);
             }
         }, 1000);
+
+        if (!info) {
+            navigate("/login");
+        }
     }, []);
 
     return (
@@ -303,19 +293,11 @@ function FormOTP({ setCurrentComponent, formData, setFormData, setIsExistUser })
             <div className={cx("title")} style={{ marginBottom: "10px" }}>
                 <h1>Xác minh OTP</h1>
                 <h6 style={{ lineHeight: "20px" }}>
-                    Nhập mã gồm 6 chữ số mà chúng tôi đã gửi đến +84 {formData.phone}. Hết hạn sau 10 phút.
+                    Nhập mã gồm 6 chữ số mà chúng tôi đã gửi đến {!regexEmail.test(info) ? "+84" : ""} {info}. Hết hạn
+                    sau 10 phút.
                 </h6>
             </div>
-            <OTP
-                separator={<span></span>}
-                value={otp}
-                onChange={setOtp}
-                length={6}
-                setCurrentComponent={setCurrentComponent}
-                setFormData={setFormData}
-                formData={formData}
-                setIsExistUser={setIsExistUser}
-            />
+            <OTP separator={<span></span>} info={info} value={otp} onChange={setOtp} length={6} />
             <button
                 onClick={handleResendOTPBtnClick}
                 className={cx("resend-otp-btn", { disabled: disabledBtn })}
@@ -327,7 +309,7 @@ function FormOTP({ setCurrentComponent, formData, setFormData, setIsExistUser })
             </button>
         </Box>
     );
-}
+};
 
 const blue = {
     100: "#DAECFF",
@@ -382,11 +364,9 @@ const InputElement = styled("input")(
 `,
 );
 
-FormOTP.propTypes = {
+FormForgotPasswordOTP.propTypes = {
     formData: PropTypes.object,
-    setFormData: PropTypes.func,
-    setCurrentComponent: PropTypes.func,
     setIsExistUser: PropTypes.func,
 };
 
-export default memo(FormOTP);
+export default memo(FormForgotPasswordOTP);

@@ -11,6 +11,7 @@
             "@helpers/*": ["./src/helpers/*"],
             "@utils/*": ["./src/utils/*"],
             "@views/*": ["./src/views/*"],
+            "@constants/*": ["./src/constants/*"],
             "@images/*": ["./src/images/*"],
             "@javascripts/*": ["./src/public/javascripts/*"],
             "@stylesheets/*": ["./src/public/stylesheets/*"]

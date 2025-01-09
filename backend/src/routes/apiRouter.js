@@ -2,27 +2,40 @@ const express = require("express");
 const router = express.Router();
 
 const { getAllDish, findDishesByName } = require("@services/dishService");
+const dishModel = require("@models/dishModel");
+const { where, Op } = require("sequelize");
+const categoryModel = require("@models/categoryModel");
 
 // * Dishes
 router.get("/dishes", async (req, res) => {
-    const name = req.query.name;
-    const sort = req.query.sort;
-    const allDish = await getAllDish();
-    const dishes = await findDishesByName(name);
+    const searchCondition = {};
+    const { name, sort, category } = req.query;
 
-    if (!name) {
-        return res.json(allDish);
+    if (name) {
+        searchCondition.name = { [Op.like]: `%${name}%` };
     }
 
-    if (dishes.length === 0) {
-        return res.json({ status: 404, message: "Not found" });
+    if (category) {
+        const categoryRecord = await categoryModel.findOne({
+            where: { name: category },
+        });
+        if (!categoryRecord) {
+            return res.status(404).json({ message: "Category not found" });
+        }
+        searchCondition.category_id = categoryRecord.category_id;
+        
     }
 
-    if (!allDish) {
-        return res.json({ status: 404, message: "Not found" });
+    try {
+        const dishes = await dishModel.findAll({ where: searchCondition, order: [["price", sort || "ASC"]] });
+        if (!dishes || dishes.length === 0) {
+            return res.status(404).json({ message: "No dishes found" });
+        }
+        res.status(200).json(dishes);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: "Internal server error" });
     }
-
-    res.status(200).json(dishes);
 });
 // * Users
 router.get("/users", (req, res) => {});

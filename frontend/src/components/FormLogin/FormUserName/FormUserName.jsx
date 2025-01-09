@@ -1,18 +1,27 @@
-import React, { memo, useRef, useState } from "react";
+import React, { memo, useEffect, useRef, useState } from "react";
 import PropTypes from "prop-types";
 import classNames from "classnames/bind";
 import { Box } from "@mui/material";
 
 import styles from "@pages/Login/Login.module.css";
 import FormPassword from "../FormPassword/FormPassword";
+import { useNavigate, useOutletContext } from "react-router-dom";
 
 const cx = classNames.bind(styles);
 
-function FormUserName({ setCurrentComponent, setFormData, formData }) {
+function FormUserName() {
+    const navigate = useNavigate();
+    const { setFormData, formData } = useOutletContext();
     const [username, setUsername] = useState("");
     const [isValidName, setIsValidName] = useState(false);
     const [nameAlertMessage, setNameAlertMessage] = useState("");
     const formRef = useRef();
+
+    useEffect(() => {
+        if (!formData.phone) {
+            navigate("/login");
+        }
+    }, []);
 
     const handleChange = (e) => {
         const value = e.currentTarget.value;
@@ -29,7 +38,7 @@ function FormUserName({ setCurrentComponent, setFormData, formData }) {
     const handleSubmit = (e) => {
         e.preventDefault();
         setFormData((prevData) => ({ ...prevData, username }));
-        setCurrentComponent(FormPassword);
+        navigate("/login/input-password");
     };
 
     const handleBlur = (e) => {
@@ -45,7 +54,7 @@ function FormUserName({ setCurrentComponent, setFormData, formData }) {
 
     const handleKeyDown = (e) => {
         if (e.keyCode === 13 && isValidName) {
-            setCurrentComponent(FormPassword);
+            navigate("/login/input-password");
             setFormData((prevData) => ({ ...prevData, username }));
         }
     };
