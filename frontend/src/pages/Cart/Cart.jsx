@@ -10,11 +10,13 @@ import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 
 import styles from "./Cart.module.css";
+import axiosInstance from "@config/axiosInstance";
+import { getCartItems } from "@services/cartService";
 
 const cx = classNames.bind(styles);
 
 function Cart() {
-    const [products, setProducts] = useState([]);
+    const [cartItems, setCartItems] = useState([]);
     const [checkBoxes, setCheckBoxes] = useState([]);
     const [editMode, setEditMode] = useState(false);
     const selectAllRef = useRef();
@@ -44,6 +46,12 @@ function Cart() {
         // get all the checkboxes
         const checkBoxList = document.querySelectorAll(".product-select input[type='checkbox']");
         setCheckBoxes(checkBoxList);
+
+        // load cart items
+        // const loadCartItems = async () => {
+        //     setCartItems(await getCartItems());
+        // };
+        // loadCartItems();
     }, []);
 
     return (
@@ -102,60 +110,29 @@ function Cart() {
                                     </TableRow>
                                 </TableHead>
                                 <TableBody>
-                                    {/* {products.map((product) => (
+                                    {cartItems.map((item, index) => (
                                         <TableRow
-                                            key={product.name}
+                                            key={index}
                                             sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                                         >
                                             <TableCell component="th" scope="row" className={cx("product")}>
                                                 <div
                                                     className={cx("product-image")}
-                                                    style={{ backgroundImage: `url(${""})` }}
+                                                    style={{ backgroundImage: `url(${item.thumbnail_path})` }}
                                                 ></div>
-                                                <div className={cx("product-name")}>Gà rán giòn rụm</div>
+                                                <div className={cx("product-name")}>{item.name}</div>
                                             </TableCell>
                                             <TableCell align="right" className={cx("quantity")}>
-                                                10
+                                                {item.quantity}
                                             </TableCell>
                                             <TableCell align="right" className={cx("price")}>
-                                                100.000 <span>₫</span>
+                                                {item.price} <span>₫</span>
                                             </TableCell>
                                             <TableCell align="right" className={cx("subtotal")}>
-                                                {product.carbs}
+                                                {item.carbs}
                                             </TableCell>
                                         </TableRow>
-                                    ))} */}
-
-                                    <TableRow sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
-                                        <TableCell>
-                                            <div hidden={!editMode} className={cx("product-select")}>
-                                                <input
-                                                    onChange={selectProduct}
-                                                    type="checkbox"
-                                                    name="product-1"
-                                                    id="product-1"
-                                                />
-                                            </div>
-                                        </TableCell>
-                                        <TableCell className={cx("product")}>
-                                            <div
-                                                className={cx("product-image")}
-                                                style={{
-                                                    backgroundImage: `url(${require("@assets/images/bestseller/food_6.png")})`,
-                                                }}
-                                            ></div>
-                                            <div className={cx("product-name")}>Gà rán giòn rụm</div>
-                                        </TableCell>
-                                        <TableCell align="right" className={cx("price")}>
-                                            100.000 <span style={{ fontSize: "var(--fontSizeLarge)" }}>₫</span>
-                                        </TableCell>
-                                        <TableCell align="right" className={cx("quantity")}>
-                                            10
-                                        </TableCell>
-                                        <TableCell align="right" className={cx("subtotal")}>
-                                            100.000 <span style={{ fontSize: "var(--fontSizeLarge)" }}>₫</span>
-                                        </TableCell>
-                                    </TableRow>
+                                    ))}
                                 </TableBody>
                             </Table>
                         </div>

@@ -3,7 +3,7 @@ const router = express.Router();
 const passport = require("passport");
 
 const authController = require("@controllers/authController");
-const authMiddleware = require("@middlewares/authMiddleware");
+const { authMiddleware } = require("@middlewares/authMiddleware");
 
 // GET
 router.get("/", authMiddleware, (req, res) => {
