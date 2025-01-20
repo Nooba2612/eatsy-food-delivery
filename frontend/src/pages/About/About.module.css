@@ -1,0 +1,75 @@
+.boxcontent
+{
+    height: 100%;  
+}
+.container {
+    text-align: center;  
+    margin: 200px;
+    max-height: 600px;
+}
+
+.textContent
+{
+    width: 60%;
+    float: left ;
+    text-align: left;
+    height: 300px;
+}
+
+.textContent h1
+{
+font-weight: bold;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+.imgRotation
+{
+    width: 40%;
+    float: left;
+    text-align: right;
+    height: 300px;
+}
+.imgRotation2
+{
+    width: 40%;
+    float: right;
+    text-align: right;
+    height: 300px;
+    align-items: right;
+    display: flex;
+    justify-content: flex-end;
+}
+.imgRotation img
+{
+width: 250px;
+animation: rotateRight 15s infinite linear;
+}
+.imgRotation2 img
+{
+
+width: 250px;
+height: 250px;
+animation: rotateLeft 15s infinite linear;
+}
+
+
+/* Keyframes for rotation */
+@keyframes rotateRight {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes rotateLeft{
+    100% {
+        transform: rotate(0deg);
+    }
+    0% {
+        transform: rotate(360deg);
+    }
+}
+

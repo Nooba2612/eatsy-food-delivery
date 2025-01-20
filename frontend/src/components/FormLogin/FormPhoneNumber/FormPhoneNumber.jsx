@@ -43,6 +43,8 @@ function FormPhoneNumber({ setCurrentComponent, setFormData, formData }) {
         });
     };
 
+    
+
     const handleOnlyInputNumber = (e) => {
         e.currentTarget.value = e.currentTarget.value.replace(regexNumbers, "");
     };
@@ -93,7 +95,7 @@ function FormPhoneNumber({ setCurrentComponent, setFormData, formData }) {
                 method: "post",
                 data: data,
             });
-
+            
             if (res.data.success) {
                 setCurrentComponent(FormOTP);
             }

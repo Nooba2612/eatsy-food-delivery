@@ -1,4 +1,4 @@
-import "./GlobalStyles.module.css";
+import "./GlobalStyles.css";
 import "@styles/normalize.css";
 
 function GlobalStyles({ children }) {

@@ -83,6 +83,10 @@
     /* Miscellaneous */
     --headerHeight: 64px;
     --footerHeight: 80px;
+
+
+    /* Custom */
+
 }
 
 *,
@@ -145,4 +149,13 @@ body {
 
 button:disabled {
     cursor: no-drop;
+}
+
+/* Global Classes */
+
+.titlePrimary {
+    font-size: 30px;
+    font-weight:bold;
+    color: var(--primaryColor);
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
 }

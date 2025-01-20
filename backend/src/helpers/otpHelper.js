@@ -15,6 +15,8 @@ const generateOTP = (length = 6) => {
 const saveOTP = async (countryCode, phoneNumber, otp) => {
     const expirationTime = new Date();
     expirationTime.setMinutes(expirationTime.getMinutes() + 10);
+    console.log(countryCode, phoneNumber, otp);
+    
     const otpId = uuidv4();
     try {
         await otpModel.create({

@@ -31,6 +31,7 @@ module.exports = [
             "no-useless-escape": "off",
             "no-inline-comments": "off",
             "no-unused-expressions": "error",
+            "no-restricted-globals": "off"
         },
     },
 ];

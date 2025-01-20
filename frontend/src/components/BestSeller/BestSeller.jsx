@@ -87,6 +87,7 @@ function BestSeller() {
         <div className={cx("offer-today")}>
           <div className={cx("table")}>
             <table>
+            <tbody>
               <tr>
                 <td className={cx("column-l")}>
                   <h3>Rainbow Sushi</h3>
@@ -130,6 +131,7 @@ function BestSeller() {
                 </td>
                 <td className={cx("red-text")}>$59.00</td>
               </tr>
+              </tbody>
             </table>
           </div>
 
