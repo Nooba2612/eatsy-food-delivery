@@ -123,10 +123,10 @@ const privateRoutes = [
                 path: "/dashboard",
                 element: <Dashboard />,
             },
-            // {
-            //     path: "/cart",
-            //     element: <Cart />,
-            // },
+            {
+                path: "/cart",
+                element: <Cart />,
+            },
             {
                 path: "/checkout",
                 element: <Checkout />,
@@ -142,16 +142,6 @@ const privateRoutes = [
             {
                 path: "/order",
                 element: <Order />,
-            },
-        ],
-    },
-    {
-        path: "/cart",
-        element: <DefaultLayout />,
-        children: [
-            {
-                path: "",
-                element: <Cart />,
             },
         ],
     },

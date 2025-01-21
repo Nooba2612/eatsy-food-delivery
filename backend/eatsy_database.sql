@@ -30,8 +30,6 @@ CREATE TABLE Users (
 	is_online BOOLEAN DEFAULT TRUE
 );
 
-select * from users;
-
 -- Create Customer table
 CREATE TABLE Customers (
 	customer_id CHAR(255) PRIMARY KEY,
@@ -59,7 +57,7 @@ CREATE TABLE Dishes (
     price DECIMAL(10, 2) NOT NULL,
     available BOOLEAN DEFAULT TRUE,
     points DECIMAL(2, 1) NOT NULL CHECK (points >= 0 AND points <= 5) DEFAULT 0,
-    rate_quantity INT CHECK (rate_quantity >=0) DEFAULT 0,
+    rate_quantity INT CHECK (rate_quantity >= 0) DEFAULT 0,
     discount_amount DECIMAL(5, 2) NOT NULL CHECK (discount_amount >= 0)  DEFAULT 0,
 	created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     update_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
@@ -161,7 +159,7 @@ CREATE TABLE InvoiceItems (
 
 -- Create Vouchers table
 CREATE TABLE Vouchers (
-    voucher_id CHAR(36) PRIMARY KEY,
+    voucher_id CHAR(255) PRIMARY KEY,
     code VARCHAR(50) UNIQUE NOT NULL,
     description TEXT,
     discount_type ENUM('Percentage', 'Amount') NOT NULL, 
@@ -169,10 +167,21 @@ CREATE TABLE Vouchers (
     valid_from DATETIME NOT NULL,
     valid_to DATETIME NOT NULL,
     min_purchase DECIMAL(10, 2) DEFAULT 0,
-    is_active BOOLEAN DEFAULT TRUE,
+    number_of_uses INT DEFAULT 0 CHECK (number_of_uses > 0),
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
+
+-- Create User Voucher table
+CREATE TABLE UserVoucher (
+    user_id CHAR(255) NOT NULL,
+    voucher_id CHAR(255) NOT NULL,
+    used_at DATETIME NULL,
+    PRIMARY KEY (user_id, voucher_id),
+    FOREIGN KEY (user_id) REFERENCES Users(user_id),
+    FOREIGN KEY (voucher_id) REFERENCES Vouchers(voucher_id)
+);
+
 -- ------------------------ TRIGGERS -------------------------------
 -- ! Run this in Admin(root) to turn on privilege
 SET GLOBAL log_bin_trust_function_creators = 1;
@@ -303,10 +312,12 @@ END$$
 -- Auto generate Vouchers Id
 CREATE TRIGGER insert_vouchers_id_trigger
 BEFORE INSERT ON Vouchers
-FOR EACH ROWF NEW.voucher_id IS NULL THEN
+FOR EACH ROW
+BEGIN
+	IF NEW.voucher_id IS NULL THEN
         SET NEW.voucher_id = UUID();
     END IF;
-END;
+END$$
 
 DELIMITER ;
 -- ---------------- DATAS -------------------------------
@@ -402,3 +413,10 @@ VALUES
 (@CombosCategoryId, '/images/dishes/combos/m_n_ngon_ph_i_th_-_4_2.png.png', 'Combo Bạn Bè Tụ Tập', '2 Mì Ý gà rán + 2 Cơm gà rán + 4 Nước ngọt + 2 Bánh xoài + 2 Khoai tây chiên', 322000),
 (@CombosCategoryId, '/images/dishes/combos/m_n_ngon_ph_i_th_-_7.png', 'Tiệc Kiểu Mới, Quà Chuẩn Gu', '4 Mì Ý gà rán + 4 Gà rán + 5 Nước ngọt + 4 Khoai tây chiên', 699000);
 
+INSERT INTO Vouchers (code, description, discount_type, discount_value, valid_from, valid_to, min_purchase, number_of_uses)
+VALUES
+('EATSYWELCOME', 'Giảm 10% cho hóa đơn', 'Percentage', 0.1, '2025-01-01 00:00:00', '2025-12-31 23:59:59', 0, 999),
+('EATSY50', 'Giảm 50.000đ cho đơn hàng từ 500.000đ', 'Amount', 50000, '2025-01-01 00:00:00', '2025-06-30 23:59:59', 500000, 100),
+('WELCOME20', 'Chào mừng khách hàng mới, giảm 20%', 'Percentage', 0.2, '2025-01-01 00:00:00', '2025-03-31 23:59:59', 0, 100),
+('BIGSALE100', 'Giảm 100.000đ cho đơn hàng từ 1.000.000đ', 'Amount', 100000, '2025-01-01 00:00:00', '2025-08-31 23:59:59', 1000000, 100),
+('FREESHIP', 'Miễn phí vận chuyển cho đơn hàng từ 300.000đ', 'Amount', 30000, '2025-01-01 00:00:00', '2025-12-31 23:59:59', 300000, 100);

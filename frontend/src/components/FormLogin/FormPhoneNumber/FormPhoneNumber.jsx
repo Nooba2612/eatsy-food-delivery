@@ -110,6 +110,8 @@ function FormPhoneNumber() {
     const handleLoginWithGoogle = async () => {
         const width = 500;
         const height = 800;
+        console.log(screen);
+        
         const left = screen.width / 2 - width / 2;
         const top = screen.height / 2 - height / 2;
 

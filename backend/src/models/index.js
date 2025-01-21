@@ -13,6 +13,7 @@ const invoiceModel = require("@models/invoiceModel");
 const voucherModel = require("@models/voucherModel");
 const otpModel = require("@models/otpModel");
 const reviewModel = require("@models/reviewModel");
+const accountVoucher = require("@models/userVoucher");
 
 sequelize
     .sync()
@@ -35,4 +36,5 @@ module.exports = {
     invoiceItemModel,
     invoiceModel,
     voucherModel,
+    accountVoucher,
 };

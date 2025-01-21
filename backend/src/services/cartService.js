@@ -29,6 +29,60 @@ const getCartItemsByUserId = async (user_id) => {
     }
 };
 
+const insertCartItem = async (currentUserId, newDishId, quantity) => {
+    const currentCartItems = await getCartItemsByUserId(currentUserId);
+
+    const { cart_id } = await cartModel.findOne({
+        where: { user_id: currentUserId },
+    });
+
+    try {
+        const isExistDish = currentCartItems.some((item) => item.dish_id === newDishId);
+
+        if (isExistDish) {
+            currentCartItems.forEach(async (item) => {
+                if (item.dish_id === newDishId) {
+                    return await updateCartItemQuantity(item.cart_item_id, item.quantity + quantity);
+                }
+            });
+        } else {
+            await cartItemModel.create({ dish_id: newDishId, cart_id, quantity });
+        }
+    } catch (error) {
+        console.log("Insert cart item failed ", error);
+    }
+};
+
+const updateCartItemQuantity = async (cartItemId, quantity) => {
+    try {
+        await cartItemModel.update(
+            { quantity },
+            {
+                where: {
+                    cart_item_id: cartItemId,
+                },
+            },
+        );
+    } catch (error) {
+        console.log("Update cart item quantity failed ", error);
+    }
+};
+
+const deleteCartItem = async (cartItemId) => {
+    try {
+        await cartItemModel.destroy({
+            where: {
+                cart_item_id: cartItemId,
+            },
+        });
+    } catch (error) {
+        console.log("Delete cart item failed");
+    }
+};
+
 module.exports = {
     getCartItemsByUserId,
+    insertCartItem,
+    updateCartItemQuantity,
+    deleteCartItem,
 };
