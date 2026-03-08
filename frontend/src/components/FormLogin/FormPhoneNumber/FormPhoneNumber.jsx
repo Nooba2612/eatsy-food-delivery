@@ -110,8 +110,8 @@ function FormPhoneNumber() {
     const handleLoginWithGoogle = async () => {
         const width = 500;
         const height = 800;
-        const left = screen.width / 2 - width / 2;
-        const top = screen.height / 2 - height / 2;
+        const left = window.screen.width / 2 - width / 2;
+        const top = window.screen.height / 2 - height / 2;
 
         // Open google login popup
         const popup = window.open(
@@ -146,8 +146,8 @@ function FormPhoneNumber() {
     const handleLoginWithFacebook = async () => {
         const width = 500;
         const height = 800;
-        const left = screen.width / 2 - width / 2;
-        const top = screen.height / 2 - height / 2;
+        const left = window.screen.width / 2 - width / 2;
+        const top = window.screen.height / 2 - height / 2;
 
         // Open facebook login popup
         const popup = window.open(
