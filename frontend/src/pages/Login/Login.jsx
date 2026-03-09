@@ -24,6 +24,7 @@ function Login() {
             if (e.data.success) {
                 login();
                 navigate("/");
+                window.close();
             } else {
                 navigate("/login");
                 logout();

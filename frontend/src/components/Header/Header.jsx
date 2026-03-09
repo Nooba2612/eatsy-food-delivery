@@ -9,6 +9,7 @@ import styles from "./Header.module.css";
 import useAuth from "@hooks/useAuth";
 import { getFirstLetterOfEachWord } from "@helpers/stringHelper";
 import { getUserInfo } from "@helpers/cookieHelper";
+import { clearCookie } from "@features/auth/authSlice";
 
 const cx = classNames.bind(styles);
 
@@ -18,7 +19,9 @@ function Header() {
     const [darkMode, setDarkmode] = useState(false);
     const [bannerBackgroundColor, setBannerBackgroundColor] = useState("var(--whiteColor)");
     const { isAuthenticated } = useAuth();
+    const [showProfileNav, setShowProfileNav] = useState(false);
     const user = getUserInfo();
+    const { logout, clearCookie } = useAuth();
 
     const handleChangeModeBtnClick = () => {
         setDarkmode((prevMode) => !prevMode);
@@ -123,11 +126,40 @@ function Header() {
                             </Link>
                         </button>
                         {isAuthenticated ? (
-                            <button className={cx("profile-btn")}>
-                                <Avatar src={user?.avatar_path || null} size={40}>
-                                    {getFirstLetterOfEachWord(user?.fullname || user?.username || "").children}
-                                </Avatar>
-                            </button>
+                            <div style={{ position: "relative" }}>
+                                <button
+                                    onMouseEnter={() => setShowProfileNav(true)}
+                                    onMouseLeave={() => setShowProfileNav(false)}
+                                    className={cx("profile-btn")}
+                                >
+                                    <Avatar src={user?.avatar_path || null} size={40}>
+                                        {getFirstLetterOfEachWord(user?.fullname || user?.username || "").children}
+                                    </Avatar>
+                                </button>
+                                {showProfileNav && (
+                                    <div
+                                        className={cx("profile-nav-container")}
+                                        onMouseEnter={() => setShowProfileNav(true)}
+                                        onMouseLeave={() => setShowProfileNav(false)}
+                                    >
+                                        <ul className={cx("profile-nav-list")}>
+                                            <li className={cx("profile-nav-item")}>
+                                                <Link to={"/profile"}>Thông tin tài khoản</Link>
+                                            </li>
+                                            <li
+                                                onClick={() => {
+                                                    logout();
+                                                    clearCookie();
+                                                    window.location.reload();
+                                                }}
+                                                className={cx("profile-nav-item")}
+                                            >
+                                                <Link to={"/"}>Đăng xuất</Link>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                )}
+                            </div>
                         ) : (
                             <button className={cx("login-btn")}>
                                 <Link to={"/login"}>

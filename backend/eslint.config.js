@@ -10,6 +10,7 @@ module.exports = [
             globals: {
                 ...globals.browser,
                 ...globals.node,
+                ...globals.es2021,
             },
             ecmaVersion: "latest",
             sourceType: "module",
@@ -17,6 +18,7 @@ module.exports = [
         rules: {
             "no-unused-vars": "warn",
             "no-undef": "error",
+            "no-restricted-globals": "off"
         },
     },
 ];

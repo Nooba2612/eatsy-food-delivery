@@ -12,9 +12,7 @@ function LoginStatus() {
             try {
                 const res = await axiosInstance({
                     url: "/auth/login-status",
-                    params: {
-
-                    },
+                    params: {},
                     method: "get",
                 });
 

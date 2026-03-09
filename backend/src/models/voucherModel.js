@@ -5,7 +5,7 @@ const voucherModel = sequelize.define(
     "Voucher",
     {
         voucher_id: {
-            type: DataTypes.STRING(36),
+            type: DataTypes.STRING(255),
             primaryKey: true,
             allowNull: false,
         },
@@ -19,7 +19,7 @@ const voucherModel = sequelize.define(
             allowNull: true,
         },
         discount_type: {
-            type: DataTypes.ENUM('Percentage', 'Amount'),
+            type: DataTypes.ENUM("Percentage", "Amount"),
             allowNull: false,
         },
         discount_value: {
@@ -39,9 +39,9 @@ const voucherModel = sequelize.define(
             defaultValue: 0,
             allowNull: false,
         },
-        is_active: {
-            type: DataTypes.BOOLEAN,
-            defaultValue: true,
+        number_of_uses: {
+            type: DataTypes.INTEGER,
+            defaultValue: 0,
         },
         created_at: {
             type: DataTypes.DATE,

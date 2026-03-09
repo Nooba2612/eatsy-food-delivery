@@ -3,6 +3,7 @@ import classNames from "classnames/bind";
 import { ExpandMore } from "@mui/icons-material";
 import { Checkbox, Divider } from "@mui/material";
 import PropTypes from "prop-types";
+import { screen } from '@testing-library/react';
 
 import styles from "@pages/Login/Login.module.css";
 import countryService from "@services/countryService";
@@ -110,6 +111,8 @@ function FormPhoneNumber() {
     const handleLoginWithGoogle = async () => {
         const width = 500;
         const height = 800;
+        console.log(screen);
+
         const left = screen.width / 2 - width / 2;
         const top = screen.height / 2 - height / 2;
 

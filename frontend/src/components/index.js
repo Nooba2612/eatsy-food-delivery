@@ -13,6 +13,7 @@ import Carousel from "./Carousel/Carousel";
 import FormForgotPasswordOTP from "./FormForgotPassword/FormForgotPasswordOTP/FormForgotPasswordOTP";
 import FormForgotPasswordInfo from "./FormForgotPassword/FormForgotPasswordInfo/FormForgotPasswordInfo";
 import FormResetPassword from "./FormForgotPassword/FormResetPassword/FormResetPassword";
+import QuantityInput from "./QuantityInput/QuantityInput";
 
 export {
     Authentication,
@@ -30,4 +31,5 @@ export {
     FormForgotPasswordInfo,
     Carousel,
     FormResetPassword,
+    QuantityInput,
 };
