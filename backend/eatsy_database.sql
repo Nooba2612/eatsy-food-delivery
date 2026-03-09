@@ -2,9 +2,11 @@
 CREATE DATABASE eatsy_food;
 SHOW DATABASES;
 
+USE eatsy_food
+
 -- User authorization
-CREATE USER 'nooba'@'localhost' IDENTIFIED BY 'noobanecon';
-GRANT ALL PRIVILEGES ON eatsy_food.* TO 'nooba'@'localhost';
+CREATE USER 'root'@'localhost' IDENTIFIED BY 'root';
+GRANT ALL PRIVILEGES ON eatsy_food.* TO 'root'@'localhost';
 SHOW GRANTS FOR CURRENT_USER;
 FLUSH PRIVILEGES;
 
@@ -30,13 +32,14 @@ CREATE TABLE Users (
 	is_online BOOLEAN DEFAULT TRUE
 );
 
+
 select * from users;
 
 -- Create Customer table
 CREATE TABLE Customers (
 	customer_id CHAR(255) PRIMARY KEY,
     user_id CHAR(255),
-    loyal_points INT CHECK (loyal_points >= 0) DEFAULT 0,
+    loyal_points INT DEFAULT 0 CHECK  (loyal_points >= 0) ,
     FOREIGN KEY (user_id) REFERENCES Users(user_id)
 );
 
@@ -58,9 +61,9 @@ CREATE TABLE Dishes (
     description TEXT,
     price DECIMAL(10, 2) NOT NULL,
     available BOOLEAN DEFAULT TRUE,
-    points DECIMAL(2, 1) NOT NULL CHECK (points >= 0 AND points <= 5) DEFAULT 0,
-    rate_quantity INT CHECK (rate_quantity >=0) DEFAULT 0,
-    discount_amount DECIMAL(5, 2) NOT NULL CHECK (discount_amount >= 0)  DEFAULT 0,
+    points DECIMAL(2, 1) NOT NULL DEFAULT 0 CHECK (points >= 0 AND points <= 5) ,
+    rate_quantity INT DEFAULT 0 CHECK (rate_quantity >=0) ,
+    discount_amount DECIMAL(5, 2) NOT NULL  DEFAULT 0 CHECK (discount_amount >= 0) ,
 	created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     update_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     FOREIGN KEY (category_id) REFERENCES Categories(category_id) ON DELETE CASCADE
@@ -401,4 +404,5 @@ VALUES
 (@CombosCategoryId, '/images/dishes/combos/m_n_ngon_ph_i_th_-_3.png', 'Combo Cả Nhà No Nê', '3 Mì Ý gà rán + 3 Nước ngọt + 2 Miếng gà rán + 1 Khoai tây chiên', 185000),
 (@CombosCategoryId, '/images/dishes/combos/m_n_ngon_ph_i_th_-_4_2.png.png', 'Combo Bạn Bè Tụ Tập', '2 Mì Ý gà rán + 2 Cơm gà rán + 4 Nước ngọt + 2 Bánh xoài + 2 Khoai tây chiên', 322000),
 (@CombosCategoryId, '/images/dishes/combos/m_n_ngon_ph_i_th_-_7.png', 'Tiệc Kiểu Mới, Quà Chuẩn Gu', '4 Mì Ý gà rán + 4 Gà rán + 5 Nước ngọt + 4 Khoai tây chiên', 699000);
+
 
