@@ -2,7 +2,7 @@ const { v4: uuidv4 } = require("uuid");
 
 const { createVerification } = require("@config/twilio");
 const { saveOTP, generateOTP, checkOTP, deleteOTP } = require("@services/otpService");
-const { compareHashedData, awaithashData, hashData } = require("@helpers/validationHelper");
+const { compareHashedData, hashData } = require("@helpers/validationHelper");
 const {
     getUserByPhoneNumber,
     createUser,
@@ -114,7 +114,7 @@ class authController {
                 return res.status(400).json({ success: false, message: "Missing required fields" });
             }
 
-            const hashedPassword = await awaithashData(password);
+            const hashedPassword = await hashData(password);
             const typeLogin = "Standard";
 
             await createUser(username, typeLogin, countryCode, phone, hashedPassword); // add user to DB

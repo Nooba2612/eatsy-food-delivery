@@ -3,31 +3,39 @@ import classNames from "classnames/bind";
 import { Container } from "@mui/material";
 
 import styles from "./BestSeller.module.css";
-import { topten } from "@assets/assets";
 import { Carousel } from "@components/index";
 
 const cx = classNames.bind(styles);
 
 function BestSeller() {
-    const items = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+    const items = [
+        "/images/dishes/burgers/2-mieng-b_-burger-b_-n_ng-whopper_3.jpg",
+        "/images/dishes/burgers/11-burger-b_-th_t-heo-x_ng-kh_i_1.jpg",
+        "/images/dishes/noodles/mi-bolognese-300x300.jpg",
+        "/images/dishes/noodles/mi-y-pho-mai-300x300.jpg",
+        "/images/dishes/pizza/Pepperoni-feast-Pizza-Xuc-Xich-Y.jpg",
+        "/images/dishes/pizza/Pizza-Dam-Bong-Dua-Kieu-Hawaii-Hawaiian.jpg",
+        "/images/dishes/pizza/Pizza-Hai-San-Xot-Mayonnaise-Ocean-Mania.jpg",
+        "/images/dishes/rices/35.RM1CmBBQTender.png",
+        "/images/dishes/rices/36.RM2CmBBQPopcorn.png",
+        "/images/dishes/rices/38.RM4CmGTNM.png",
+    ];
 
     return (
         <div className={cx("wrapper")}>
             <Container maxWidth="lg">
                 <div className={cx("title")}>
-                    <h1>Best Seller Foods </h1>
-                    <h6>Lorem ipsum dolor sit amet consectetur adipisicing elit. Vel, similique ducimus.</h6>
+                    <h1>Món Bán Chạy Nhất</h1>
+                    <h6>Những món ăn được yêu thích và chọn lựa nhiều nhất bởi thực khách.</h6>
                 </div>
 
                 <Carousel items={items} active={0} />
             </Container>
 
-            {/* Best Offer Today */}
-
             <Container maxWidth="lg">
                 <div className={cx("title")}>
-                    <h1>Today Best Offers</h1>
-                    <h6>Lorem ipsum dolor sit amet consecteturr, vitae illum?</h6>
+                    <h1>Ưu Đãi Hôm Nay</h1>
+                    <h6>Chọn ngay món ngon với giá cực ưu đãi – chỉ áp dụng trong hôm nay!</h6>
                 </div>
 
                 <div className={cx("offer-today")}>
@@ -36,53 +44,50 @@ function BestSeller() {
                             <tbody>
                                 <tr>
                                     <td className={cx("column-l")}>
-                                        <h3>Rainbow Sushi</h3>
+                                        <h3>Burger Bò Nướng Than Kiểu Mỹ</h3>
                                         <h6>
-                                            Lorem ips jja jjsd kide eidei djedoe diediedn jedne jedne architecto
-                                            quibusdam nulla.
+                                            Ba lớp bò nướng than thơm lừng kết hợp phô mai, thịt xông khói giòn và rau
+                                            tươi mát.
                                         </h6>
                                     </td>
-                                    <td className={cx("red-text")}>$59.00</td>
+                                    <td className={cx("red-text")}>79.000₫</td>
                                 </tr>
 
                                 <tr>
                                     <td className={cx("column-l")}>
-                                        <h3>Rainbow Sushi</h3>
+                                        <h3>Pizza Siêu Topping Hải Sản 4 Mùa</h3>
                                         <h6>
-                                            Lorem ips jja jjsd kide eidei djedoe diediedn jedne jedne architecto
-                                            quibusdam nulla.
+                                            Đế pizza giòn rụm phủ đầy tôm, mực, cua và phô mai tan chảy, mang hương vị
+                                            biển cả suốt 4 mùa.
                                         </h6>
                                     </td>
-                                    <td className={cx("red-text")}>$59.00</td>
+                                    <td className={cx("red-text")}>355.000₫</td>
                                 </tr>
 
                                 <tr>
                                     <td className={cx("column-l")}>
-                                        <h3>Rainbow Sushi</h3>
-                                        <h6>
-                                            Lorem ips jja jjsd kide eidei djedoe diediedn jedne jedne architecto
-                                            quibusdam nulla.
-                                        </h6>
+                                        <h3>Cơm Gà Nướng BBQ Không Xương</h3>
+                                        <h6>Gà nướng BBQ đậm vị, không xương, ăn kèm với cơm nóng và rau củ tươi.</h6>
                                     </td>
-                                    <td className={cx("red-text")}>$59.00</td>
+                                    <td className={cx("red-text")}>39.000₫</td>
                                 </tr>
 
                                 <tr>
                                     <td className={cx("column-l")}>
-                                        <h3>Rainbow Sushi</h3>
+                                        <h3>Mì Ý Sốt Carbonara</h3>
                                         <h6>
-                                            Lorem ips jja jjsd kide eidei djedoe diediedn jedne jedne architecto
-                                            quibusdam nulla.
+                                            Mì Ý sốt kem béo ngậy kết hợp với thịt xông khói, phô mai Parmesan và trứng
+                                            gà tươi.
                                         </h6>
                                     </td>
-                                    <td className={cx("red-text")}>$59.00</td>
+                                    <td className={cx("red-text")}>155.000₫</td>
                                 </tr>
                             </tbody>
                         </table>
                     </div>
 
                     <div className={cx("today-img")}>
-                        <img src={topten[6].image} alt="Food Image" />
+                        <img src={require("@assets/images/banner/bestseller_banner.png")} alt="Banner ưu đãi hôm nay" />
                     </div>
                 </div>
             </Container>

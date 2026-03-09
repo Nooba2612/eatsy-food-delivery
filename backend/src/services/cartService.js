@@ -29,7 +29,7 @@ const getCartItemsByUserId = async (user_id) => {
     }
 };
 
-const insertCartItem = async (currentUserId, newDishId, quantity) => {
+const addCartItem = async (currentUserId, newDishId, quantity) => {
     const currentCartItems = await getCartItemsByUserId(currentUserId);
 
     const { cart_id } = await cartModel.findOne({
@@ -45,9 +45,9 @@ const insertCartItem = async (currentUserId, newDishId, quantity) => {
                     return await updateCartItemQuantity(item.cart_item_id, item.quantity + quantity);
                 }
             });
-        } else {
-            await cartItemModel.create({ dish_id: newDishId, cart_id, quantity });
         }
+        
+        await cartItemModel.create({ dish_id: newDishId, cart_id, quantity });
     } catch (error) {
         console.log("Insert cart item failed ", error);
     }
@@ -82,7 +82,7 @@ const deleteCartItem = async (cartItemId) => {
 
 module.exports = {
     getCartItemsByUserId,
-    insertCartItem,
+    addCartItem,
     updateCartItemQuantity,
     deleteCartItem,
 };

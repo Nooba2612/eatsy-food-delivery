@@ -2,12 +2,8 @@ const { getAllDish, getDishesByName } = require("@services/dishService");
 const dishModel = require("@models/dishModel");
 const { where, Op } = require("sequelize");
 const categoryModel = require("@models/categoryModel");
-const { authMiddleware } = require("@middlewares/authMiddleware");
-const { getCartItemsByUserId } = require("@services/cartService");
-const { getUserInfo } = require("@helpers/jwtHelper");
-const { jwtDecode } = require("jwt-decode");
 
-class apiController {
+class dishController {
     async getDishes(req, res) {
         const searchCondition = {};
         const { name, sort, category } = req.query;
@@ -38,16 +34,7 @@ class apiController {
         }
     }
 
-    async getCartItems(req, res) {
-        const { token } = req.cookies;
-        const { user_id } = jwtDecode(token);
 
-        const cartItems = await getCartItemsByUserId(user_id);
-
-        console.log("🐸  cartItems:", cartItems);
-
-        res.json(cartItems);
-    }
 }
 
-module.exports = new apiController();
+module.exports = new dishController();
